@@ -20,7 +20,7 @@ import
 export types
 
 logScope:
-  topics = "waku node rest client v1"
+  topics = "synapse node rest client v1"
 
 proc encodeBytes*(value: FilterLegacySubscribeRequest,
                   contentType: string): RestResult[seq[byte]] =

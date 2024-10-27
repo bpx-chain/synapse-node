@@ -20,7 +20,7 @@ import
   ./queries
 
 logScope:
-  topics = "waku archive sqlite"
+  topics = "synapse archive sqlite"
 
 proc init(db: SqliteDatabase): ArchiveDriverResult[void] =
   ## Misconfiguration can lead to nil DB

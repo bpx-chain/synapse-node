@@ -27,7 +27,7 @@ import
   ./callback
 
 ################################################################################
-### Wrapper around the waku node
+### Wrapper around the synapse node
 ################################################################################
 
 ################################################################################
@@ -45,7 +45,7 @@ const RET_MISSING_CALLBACK: cint = 2
 
 proc relayEventCallback(ctx: ptr Context): WakuRelayHandler =
   return proc (pubsubTopic: PubsubTopic, msg: WakuMessage): Future[system.void]{.async.} =
-    # Callback that hadles the Waku Relay events. i.e. messages or errors.
+    # Callback that hadles the Synapse Relay events. i.e. messages or errors.
     if isNil(ctx[].eventCallback):
       error "eventCallback is nil"
       return
@@ -79,7 +79,7 @@ proc waku_new(configJson: cstring,
     echo "error: missing callback in waku_new"
     return nil
 
-  ## Create the Waku thread that will keep waiting for req from the main thread.
+  ## Create the Synapse thread that will keep waiting for req from the main thread.
   var ctx = waku_thread.createWakuThread().valueOr:
     let msg = "Error in createWakuThread: " & $error
     callback(RET_ERR, unsafeAddr msg[0], cast[csize_t](len(msg)), userData)

@@ -1,0 +1,96 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+      - 'release/**'
+    tags:
+      - '**'
+  release:
+    types: [published]
+  pull_request:
+    branches:
+      - '**'
+
+concurrency:
+  # SHA is added to the end if on `main` to let all main workflows run
+  group: ${{ github.ref }}-${{ github.workflow }}-${{ github.event_name }}-${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev' || startsWith(github.ref, 'refs/heads/release/')) && github.sha || '' }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, macos-latest]
+        arch: [amd64]
+        include:
+        - os: macos-latest
+          arch: arm64
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+
+    name: ${{ matrix.os }} - ${{ matrix.arch }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+  
+    - name: Get submodules hash
+      id: submodules
+      shell: bash
+      run: |
+        echo "hash=$(git submodule status | awk '{print $1}' | sort | sha256sum | head -c 64)" >> $GITHUB_OUTPUT
+  
+    - name: Cache submodules
+      uses: actions/cache@v3
+      with:
+        path: |
+          vendor/
+          .git/modules
+        key: ${{ matrix.os }}-${{matrix.arch}}-submodules-${{ steps.submodules.outputs.hash }}
+  
+    - name: Prepare variables
+      id: vars
+      shell: bash
+      run: |
+        if [ "${{ github.event_name }}" == 'release' ] && [ "${{ github.event.action }}" == 'published' ]; then
+          SYNAPSE_VERSION=${GITHUB_REF#refs/*/}
+        else
+          SYNAPSE_VERSION=dev
+        fi
+        echo "tgz=synapse-$SYNAPSE_VERSION-${{runner.os}}-${{matrix.arch}}.tar.gz" | tr "[:upper:]" "[:lower:]" >> $GITHUB_OUTPUT
+        
+        if [[ "${{runner.os}}" == "macOS" ]]; then
+          echo os=macosx >> $GITHUB_OUTPUT
+        elif [[ "${{runner.os}}" == "Linux" ]]; then
+          echo os=linux >> $GITHUB_OUTPUT
+        else
+          echo os=Windows_NT >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Install dependencies
+      run: |
+        make -j2 NIMFLAGS="--parallelBuild:2 -d:disableMarchNative --os:${{steps.vars.outputs.os}} --cpu:${{matrix.arch}}" V=1 update
+    
+    - name: Build project
+      run: |
+        make -j2 NIMFLAGS="--parallelBuild:2 -d:disableMarchNative --os:${{steps.vars.outputs.os}} --cpu:${{matrix.arch}} -d:postgres" CI=false synapse
+        mv build synapse        
+        tar zcvf ${{steps.vars.outputs.tgz}} ./synapse
+  
+    - name: Upload asset
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{steps.vars.outputs.tgz}}
+        path: ${{steps.vars.outputs.tgz}}
+        if-no-files-found: error
+    
+    - name: Upload release artifacts
+      if: github.event_name == 'release'
+      shell: bash
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        gh release upload ${GITHUB_REF#refs/*/} ${{steps.vars.outputs.tgz}}

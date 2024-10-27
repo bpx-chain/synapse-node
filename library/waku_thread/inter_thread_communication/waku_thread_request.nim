@@ -1,7 +1,7 @@
 
 ## This file contains the base message request type that will be handled.
 ## The requests are created by the main thread and processed by
-## the Waku Thread.
+## the Synapse Thread.
 
 import
   std/json,

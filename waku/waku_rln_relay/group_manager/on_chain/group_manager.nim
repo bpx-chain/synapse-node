@@ -28,7 +28,7 @@ from strutils import parseHexInt
 export group_manager_base
 
 logScope:
-  topics = "waku rln_relay onchain_group_manager"
+  topics = "synapse rln_relay onchain_group_manager"
 
 # using the when predicate does not work within the contract macro, hence need to dupe
 when defined(rln_v2):

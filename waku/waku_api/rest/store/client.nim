@@ -18,7 +18,7 @@ export types
 
 
 logScope:
-  topics = "waku node rest store_api"
+  topics = "synapse node rest store_api"
 
 
 proc decodeBytes*(t: typedesc[StoreResponseRest],

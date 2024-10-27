@@ -112,7 +112,7 @@ proc withColocationLimit*(builder: var WakuNodeBuilder,
                           colocationLimit: int) =
   builder.colocationLimit = colocationLimit
 
-## Waku switch
+## Synapse switch
 
 proc withSwitchConfiguration*(builder: var WakuNodeBuilder,
                               maxConnections = none(int),

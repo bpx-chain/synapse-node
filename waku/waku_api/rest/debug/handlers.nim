@@ -17,7 +17,7 @@ export types
 
 
 logScope:
-  topics = "waku node rest debug_api"
+  topics = "synapse node rest debug_api"
 
 
 const ROUTE_DEBUG_INFOV1* = "/debug/v1/info"

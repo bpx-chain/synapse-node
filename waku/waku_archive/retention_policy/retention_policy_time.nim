@@ -14,7 +14,7 @@ import
   ../retention_policy
 
 logScope:
-  topics = "waku archive retention_policy"
+  topics = "synapse archive retention_policy"
 
 
 const DefaultRetentionTime*: int64 = 30.days.seconds

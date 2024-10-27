@@ -16,7 +16,7 @@ import
 
 
 logScope:
-  topics = "waku filter"
+  topics = "synapse filter"
 
 
 const

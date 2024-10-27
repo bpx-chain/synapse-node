@@ -18,7 +18,7 @@ import
   ../../waku_keystore
 
 logScope:
-  topics = "waku rln_relay ffi"
+  topics = "synapse rln_relay ffi"
 
 proc membershipKeyGen*(ctxPtr: ptr RLN): RlnRelayResult[IdentityCredential] =
   ## generates a IdentityCredential that can be used for the registration into the rln membership contract

@@ -1,4 +1,4 @@
-# Waku Noise Protocols for Waku Payload Encryption
+# Synapse Noise Protocols for Synapse Payload Encryption
 ## See spec for more details:
 ## https://github.com/vacp2p/rfc/tree/master/content/docs/rfcs/35
 ##
@@ -20,7 +20,7 @@ import libp2p/errors
 import libp2p/crypto/[crypto, chacha20poly1305, curve25519]
 
 logScope:
-  topics = "waku noise"
+  topics = "synapse noise"
 
 #################################################################
 
@@ -181,10 +181,10 @@ type
     h*: MDigest[256]
 
   #################################
-  # Waku Payload V2
+  # Synapse Payload V2
   #################################
 
-  # PayloadV2 defines an object for Waku payloads with version 2 as in
+  # PayloadV2 defines an object for Synapse payloads with version 2 as in
   # https://rfc.vac.dev/spec/35/#public-keys-serialization
   # It contains a message nametag, protocol ID field, the handshake message (for Noise handshakes) and 
   # a transport message (for Noise handshakes and ChaChaPoly encryptions)

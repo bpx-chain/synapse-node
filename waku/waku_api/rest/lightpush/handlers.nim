@@ -25,7 +25,7 @@ import
 export types
 
 logScope:
-  topics = "waku node rest lightpush api"
+  topics = "synapse node rest lightpush api"
 
 const futTimeoutForPushRequestProcessing* = 5.seconds
 
@@ -46,7 +46,7 @@ proc installLightPushRequestHandler*(
   ) =
 
   router.api(MethodPost, ROUTE_LIGHTPUSH) do (contentBody: Option[ContentBody]) -> RestApiResponse:
-    ## Send a request to push a waku message
+    ## Send a request to push a synapse message
     debug "post", ROUTE_LIGHTPUSH, contentBody
 
     let decodedBody = decodeRequestBody[PushRequest](contentBody)

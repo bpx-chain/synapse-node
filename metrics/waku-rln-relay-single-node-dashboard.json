@@ -107,7 +107,7 @@
           "refId": "A"
         }
       ],
-      "title": "Waku RLN Relay Membership Insertion Duration ",
+      "title": "Synapse RLN Relay Membership Insertion Duration ",
       "type": "timeseries"
     },
     {
@@ -192,7 +192,7 @@
           "refId": "A"
         }
       ],
-      "title": "Waku RLN Relay Total Messages Count",
+      "title": "Synapse RLN Relay Total Messages Count",
       "type": "timeseries"
     },
     {
@@ -277,7 +277,7 @@
           "refId": "A"
         }
       ],
-      "title": "Waku RLN Relay Total Proofs Verified Count",
+      "title": "Synapse RLN Relay Total Proofs Verified Count",
       "type": "timeseries"
     },
     {
@@ -362,7 +362,7 @@
           "refId": "A"
         }
       ],
-      "title": "Waku RLN Relay Mounting Duration",
+      "title": "Synapse RLN Relay Mounting Duration",
       "type": "timeseries"
     },
     {
@@ -447,7 +447,7 @@
           "refId": "A"
         }
       ],
-      "title": "Waku RLN Relay Spam Messages Count",
+      "title": "Synapse RLN Relay Spam Messages Count",
       "type": "timeseries"
     },
     {
@@ -532,7 +532,7 @@
           "refId": "A"
         }
       ],
-      "title": "Waku RLN Relay Valid Messages Count",
+      "title": "Synapse RLN Relay Valid Messages Count",
       "type": "timeseries"
     },
     {
@@ -617,7 +617,7 @@
           "refId": "A"
         }
       ],
-      "title": "Waku RLN Relay Credentials Import Duration",
+      "title": "Synapse RLN Relay Credentials Import Duration",
       "type": "timeseries"
     },
     {
@@ -704,7 +704,7 @@
           "refId": "A"
         }
       ],
-      "title": "Waku RLN Relay Valid Messages By Root Window",
+      "title": "Synapse RLN Relay Valid Messages By Root Window",
       "type": "timeseries"
     },
     {
@@ -789,7 +789,7 @@
           "refId": "A"
         }
       ],
-      "title": "Waku RLN Relay Proof Generation Duration",
+      "title": "Synapse RLN Relay Proof Generation Duration",
       "type": "timeseries"
     },
     {
@@ -874,7 +874,7 @@
           "refId": "A"
         }
       ],
-      "title": "Waku RLN Relay Registration Duration",
+      "title": "Synapse RLN Relay Registration Duration",
       "type": "timeseries"
     },
     {
@@ -959,7 +959,7 @@
           "refId": "A"
         }
       ],
-      "title": "Waku RLN Relay Proof Verification Duration",
+      "title": "Synapse RLN Relay Proof Verification Duration",
       "type": "timeseries"
     }
   ],
@@ -976,7 +976,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Waku RLN Relay - Single Node",
+  "title": "Synapse RLN Relay - Single Node",
   "uid": "JCJmf8S4k",
   "version": 2,
   "weekStart": ""

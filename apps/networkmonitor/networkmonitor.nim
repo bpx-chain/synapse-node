@@ -48,7 +48,7 @@ proc setDiscoveredPeersCapabilities(
   routingTableNodes: seq[Node]) =
   for capability in @[Relay, Store, Filter, Lightpush]:
     let nOfNodesWithCapability = routingTableNodes.countIt(it.record.supportsCapability(capability))
-    info "capabilities as per ENR waku flag", capability=capability, amount=nOfNodesWithCapability
+    info "capabilities as per ENR synapse flag", capability=capability, amount=nOfNodesWithCapability
     networkmonitor_peer_type_as_per_enr.set(int64(nOfNodesWithCapability), labelValues = [$capability])
 
 proc analyzePeer(
@@ -275,7 +275,7 @@ proc crawlNetwork(node: WakuNode,
     # nodes are nested into bucket, flat it
     let flatNodes = wakuDiscv5.protocol.routingTable.buckets.mapIt(it.nodes).flatten()
 
-    # populate metrics related to capabilities as advertised by the ENR (see waku field)
+    # populate metrics related to capabilities as advertised by the ENR (see synapse field)
     setDiscoveredPeersCapabilities(flatNodes)
 
     # tries to connect to all newly discovered nodes
@@ -306,7 +306,7 @@ proc crawlNetwork(node: WakuNode,
 proc retrieveDynamicBootstrapNodes(dnsDiscovery: bool, dnsDiscoveryUrl: string, dnsDiscoveryNameServers: seq[IpAddress]): Result[seq[RemotePeerInfo], string] =
   if dnsDiscovery and dnsDiscoveryUrl != "":
     # DNS discovery
-    debug "Discovering nodes using Waku DNS discovery", url=dnsDiscoveryUrl
+    debug "Discovering nodes using Synapse DNS discovery", url=dnsDiscoveryUrl
 
     var nameServers: seq[TransportAddress]
     for ip in dnsDiscoveryNameServers:
@@ -324,7 +324,7 @@ proc retrieveDynamicBootstrapNodes(dnsDiscovery: bool, dnsDiscoveryUrl: string, 
       return wakuDnsDiscovery.get().findPeers()
         .mapErr(proc (e: cstring): string = $e)
     else:
-      warn "Failed to init Waku DNS discovery"
+      warn "Failed to init Synapse DNS discovery"
 
   debug "No method for retrieving dynamic bootstrap nodes specified."
   ok(newSeq[RemotePeerInfo]()) # Return an empty seq by default
@@ -488,7 +488,7 @@ when isMainModule:
   var conf = confRes.get()
   info "cli flags", conf=conf
 
-  if conf.clusterId == 1:
+  if conf.clusterId == 279:
     let twnClusterConf = ClusterConf.TheWakuNetworkConf()
 
     conf.bootstrapNodes = twnClusterConf.discv5BootstrapNodes
@@ -528,7 +528,7 @@ when isMainModule:
     quit(1)
   let restClient = clientRest.get()
 
-  # start waku node
+  # start synapse node
   let nodeRes = initAndStartApp(conf)
   if nodeRes.isErr():
     error "could not start node"
@@ -559,7 +559,7 @@ when isMainModule:
       quit 1
 
   node.mountMetadata(conf.clusterId).isOkOr:
-    error "failed to mount waku metadata protocol: ", err=error
+    error "failed to mount synapse metadata protocol: ", err=error
     quit 1
 
   for pubsubTopic in conf.pubsubTopics:

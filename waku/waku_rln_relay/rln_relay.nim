@@ -32,7 +32,7 @@ import
   ../utils/collector
 
 logScope:
-  topics = "waku rln_relay"
+  topics = "synapse rln_relay"
 
 type 
   WakuRlnConfig* = object
@@ -323,7 +323,7 @@ proc clearNullifierLog(rlnPeer: WakuRlnRelay) =
 proc generateRlnValidator*(wakuRlnRelay: WakuRLNRelay,
                            spamHandler = none(SpamHandler)): WakuValidatorHandler =
   ## this procedure is a thin wrapper for the pubsub addValidator method
-  ## it sets a validator for waku messages, acting in the registered pubsub topic
+  ## it sets a validator for synapse messages, acting in the registered pubsub topic
   ## the message validation logic is according to https://rfc.vac.dev/spec/17/
   proc validator(topic: string, message: WakuMessage): Future[pubsub.ValidationResult] {.async.} =
     trace "rln-relay topic validator is called"

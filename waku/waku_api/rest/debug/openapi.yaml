@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Waku V2 node REST API
+  title: Synapse V2 node REST API
   version: 1.0.0
   contact:
     name: VAC Team
@@ -14,13 +14,13 @@ paths:
   /debug/v1/info:
     get:
       summary: Get node info
-      description: Retrieve information about a Waku v2 node.
+      description: Retrieve information about a Synapse v2 node.
       operationId: getNodeInfo
       tags:
         - debug
       responses:
         '200':
-          description: Information about a Waku v2 node.
+          description: Information about a Synapse v2 node.
           content:
             application/json:
               schema:
@@ -33,13 +33,13 @@ paths:
   /debug/v1/version:
     get:
       summary: Get node version
-      description: Retrieve the Waku v2 node version.
+      description: Retrieve the Synapse v2 node version.
       operationId: getNodeVersion
       tags:
         - debug
       responses:
         '200':
-          description: The version of a Waku v2 node.
+          description: The version of a Synapse v2 node.
           content:
             text/plain:
               schema:

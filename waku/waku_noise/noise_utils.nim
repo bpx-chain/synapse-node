@@ -1,4 +1,4 @@
-# Waku Noise Protocols for Waku Payload Encryption
+# Synapse Noise Protocols for Synapse Payload Encryption
 # Noise utilities module
 ## See spec for more details:
 ## https://github.com/vacp2p/rfc/tree/master/content/docs/rfcs/35
@@ -21,7 +21,7 @@ import ./noise_types
 import ./noise
 
 logScope:
-  topics = "waku noise"
+  topics = "synapse noise"
 
 #################################################################
 

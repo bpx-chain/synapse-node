@@ -13,7 +13,7 @@ import
   ../serdes
 
 logScope:
-  topics = "waku node rest health_api"
+  topics = "synapse node rest health_api"
 
 const ROUTE_HEALTH* = "/health"
 

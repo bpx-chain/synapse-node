@@ -24,7 +24,7 @@ const
 type WakuStoreResult*[T] = Result[T, string]
 
 
-## Waku message digest
+## Synapse message digest
 
 type MessageDigest* = MDigest[256]
 

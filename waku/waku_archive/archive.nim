@@ -26,7 +26,7 @@ import
   ./archive_metrics
 
 logScope:
-  topics = "waku archive"
+  topics = "synapse archive"
 
 const
   DefaultPageSize*: uint = 20

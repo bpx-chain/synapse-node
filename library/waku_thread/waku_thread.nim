@@ -47,13 +47,13 @@ proc waku_init() =
     nimGC_setStackBottom(locals)
 
 proc run(ctx: ptr Context) {.thread.} =
-  ## This is the worker thread body. This thread runs the Waku node
+  ## This is the worker thread body. This thread runs the Synapse node
   ## and attends library user requests (stop, connect_to, etc.)
 
   var node: WakuNode
 
   while running.load == true:
-    ## Trying to get a request from the libwaku main thread
+    ## Trying to get a request from the libsynapse main thread
 
     var request: ptr InterThreadRequest
     waitFor ctx.reqSignal.wait()
@@ -73,7 +73,7 @@ proc run(ctx: ptr Context) {.thread.} =
 
 proc createWakuThread*(): Result[ptr Context, string] =
   ## This proc is called from the main thread and it creates
-  ## the Waku working thread.
+  ## the Synapse working thread.
 
   waku_init()
 
@@ -91,7 +91,7 @@ proc createWakuThread*(): Result[ptr Context, string] =
     # and freeShared for typed allocations!
     freeShared(ctx)
 
-    return err("failed to create the Waku thread: " & getCurrentExceptionMsg())
+    return err("failed to create the Synapse thread: " & getCurrentExceptionMsg())
 
   return ok(ctx)
 
@@ -111,7 +111,7 @@ proc sendRequestToWakuThread*(ctx: ptr Context,
   ## Sending the request
   let sentOk = ctx.reqChannel.trySend(req)
   if not sentOk:
-    return err("Couldn't send a request to the waku thread: " & $req[])
+    return err("Couldn't send a request to the synapse thread: " & $req[])
 
   let fireSyncRes = ctx.reqSignal.fireSync()
   if fireSyncRes.isErr():
@@ -126,7 +126,7 @@ proc sendRequestToWakuThread*(ctx: ptr Context,
   var response: ptr InterThreadResponse
   var recvOk = ctx.respChannel.tryRecv(response)
   if recvOk == false:
-    return err("Couldn't receive response from the waku thread: " & $req[])
+    return err("Couldn't receive response from the synapse thread: " & $req[])
 
   ## Converting the thread-safe response into a managed/CG'ed `Result`
   return InterThreadResponse.process(response)

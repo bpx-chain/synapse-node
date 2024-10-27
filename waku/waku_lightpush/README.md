@@ -1,1 +1,1 @@
-# Waku Light Push
+# Synapse Light Push

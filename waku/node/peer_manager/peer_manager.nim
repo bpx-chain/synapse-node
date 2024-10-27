@@ -35,7 +35,7 @@ declarePublicGauge waku_peer_store_size, "Number of peers managed by the peer st
 declarePublicGauge waku_service_peers, "Service peer protocol and multiaddress ", labels = ["protocol", "peerId"]
 
 logScope:
-  topics = "waku node peer_manager"
+  topics = "synapse node peer_manager"
 
 randomize()
 
@@ -346,7 +346,7 @@ proc onPeerMetadata(pm: PeerManager, peerId: PeerId) {.async.} =
       break guardClauses
     
     let metadata = (await pm.wakuMetadata.request(conn)).valueOr:
-      reason = "waku metatdata request failed: " & error
+      reason = "synapse metatdata request failed: " & error
       break guardClauses
 
     let clusterId = metadata.clusterId.valueOr:
@@ -683,7 +683,7 @@ proc manageRelayPeers*(pm: PeerManager) {.async.} =
   var peersToConnect: HashSet[PeerId] # Can't use RemotePeerInfo as they are ref objects
   var peersToDisconnect: int
 
-  # Get all connected peers for Waku Relay
+  # Get all connected peers for Synapse Relay
   var (inPeers, outPeers) = pm.connectedPeers(WakuRelayCodec)
 
   # Calculate in/out target number of peers for each shards

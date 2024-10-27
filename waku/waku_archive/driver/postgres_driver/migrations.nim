@@ -11,7 +11,7 @@ import
   ../postgres_driver
 
 logScope:
-  topics = "waku archive migration"
+  topics = "synapse archive migration"
 
 const SchemaVersion* = 2 # increase this when there is an update in the database schema
 

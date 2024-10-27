@@ -18,7 +18,7 @@ import
   ../../common/base64
 
 logScope:
-  topics = "waku node rest"
+  topics = "synapse node rest"
 
 createJsonFlavor RestJson
 

@@ -4,7 +4,7 @@ else:
   {.push raises: [].}
 
 ## A set of utilities to integrate EIP-1459 DNS-based discovery
-## for Waku v2 nodes.
+## for Synapse v2 nodes.
 ##
 ## EIP-1459 is defined in https://eips.ethereum.org/EIPS/eip-1459
 
@@ -27,10 +27,10 @@ import
 export client
 
 declarePublicGauge waku_dnsdisc_discovered, "number of nodes discovered"
-declarePublicGauge waku_dnsdisc_errors, "number of waku dnsdisc errors", ["type"]
+declarePublicGauge waku_dnsdisc_errors, "number of synapse dnsdisc errors", ["type"]
 
 logScope:
-  topics = "waku dnsdisc"
+  topics = "synapse dnsdisc"
 
 type
   WakuDnsDiscovery* = object
@@ -48,7 +48,7 @@ proc emptyResolver*(domain: string): Future[string] {.async, gcsafe.} =
 proc findPeers*(wdd: var WakuDnsDiscovery): Result[seq[RemotePeerInfo], cstring] =
   ## Find peers to connect to using DNS based discovery
 
-  info "Finding peers using Waku DNS discovery"
+  info "Finding peers using Synapse DNS discovery"
 
   # Synchronise client tree using configured resolver
   var tree: Tree
@@ -87,7 +87,7 @@ proc findPeers*(wdd: var WakuDnsDiscovery): Result[seq[RemotePeerInfo], cstring]
 proc init*(T: type WakuDnsDiscovery,
            locationUrl: string,
            resolver: Resolver): Result[T, cstring] =
-  ## Initialise Waku peer discovery via DNS
+  ## Initialise Synapse peer discovery via DNS
 
   debug "init WakuDnsDiscovery", locationUrl=locationUrl
 

@@ -25,7 +25,7 @@ import
 export types
 
 logScope:
-  topics = "waku node rest store_api"
+  topics = "synapse node rest store_api"
 
 const futTimeout* = 5.seconds # Max time to wait for futures
 

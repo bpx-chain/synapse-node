@@ -20,7 +20,7 @@ export types
 
 
 logScope:
-  topics = "waku node rest admin api"
+  topics = "synapse node rest admin api"
 
 proc encodeBytes*(value: seq[string],
                   contentType: string): RestResult[seq[byte]] =

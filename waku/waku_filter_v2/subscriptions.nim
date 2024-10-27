@@ -14,7 +14,7 @@ import
   ../utils/tableutils
 
 logScope:
-  topics = "waku filter subscriptions"
+  topics = "synapse filter subscriptions"
 
 const
   MaxFilterPeers* = 1000

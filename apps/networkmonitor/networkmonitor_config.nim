@@ -47,7 +47,7 @@ type
 
     clusterId* {.
       desc: "Cluster id that the node is running in. Node in a different cluster id is disconnected."
-      defaultValue: 1
+      defaultValue: 279
       name: "cluster-id" }: uint32
 
     rlnRelay* {.

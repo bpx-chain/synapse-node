@@ -1,6 +1,6 @@
 
 ## This file contains the base message response type that will be handled.
-## The response will be created from the Waku Thread and processed in
+## The response will be created from the Synapse Thread and processed in
 ## the main thread.
 
 import
@@ -40,7 +40,7 @@ proc process*(T: type InterThreadResponse,
               Result[string, string] =
   ## Converts the received `ptr InterThreadResponse` into a
   ## `Result[string, string]`. Notice that the response is expected to be
-  ## allocated from the Waku Thread and deallocated by the main thread.
+  ## allocated from the Synapse Thread and deallocated by the main thread.
 
   defer:
     deallocShared(resp[].content)

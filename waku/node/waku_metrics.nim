@@ -19,7 +19,7 @@ import
 const LogInterval = 10.minutes
 
 logScope:
-  topics = "waku node metrics"
+  topics = "synapse node metrics"
 
 proc startMetricsLog*() =
   var logMetrics: CallbackFunc

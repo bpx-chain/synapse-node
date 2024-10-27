@@ -12,7 +12,7 @@ import
   chronicles
 
 logScope:
-  topics = "waku archive partitions_manager"
+  topics = "synapse archive partitions_manager"
 
 ## The time range has seconds resolution
 type TimeRange* = tuple[beginning: int64, `end`: int64]

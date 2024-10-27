@@ -14,7 +14,7 @@ import
 
 
 logScope:
-  topics = "waku node peer_manager"
+  topics = "synapse node peer_manager"
 
 
 const SchemaVersion* = 1 # increase this when there is an update in the database schema

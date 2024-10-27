@@ -1,4 +1,4 @@
-# Waku Noise Protocols for Waku Payload Encryption
+# Synapse Noise Protocols for Synapse Payload Encryption
 # Noise module implementing the Noise State Objects and ChaChaPoly encryption/decryption primitives
 ## See spec for more details:
 ## https://github.com/vacp2p/rfc/tree/master/content/docs/rfcs/35
@@ -26,7 +26,7 @@ import libp2p/protocols/secure/secure
 import ./noise_types
 
 logScope:
-  topics = "waku noise"
+  topics = "synapse noise"
 
 #################################################################
 

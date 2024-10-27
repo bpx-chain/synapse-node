@@ -13,7 +13,7 @@ import
   ../waku_core
 
 logScope:
-  topics = "waku node message_cache"
+  topics = "synapse node message_cache"
 
 const DefaultMessageCacheCapacity: int = 50
 

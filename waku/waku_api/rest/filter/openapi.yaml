@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Waku V2 node REST API
+  title: Synapse V2 node REST API
   version: 1.0.0
   contact:
     name: VAC Team
@@ -10,7 +10,7 @@ tags:
     description: Filter REST API for WakuV2 node
 
 paths:
-  # Legacy support for v1 waku filter
+  # Legacy support for v1 synapse filter
   # TODO: legacy endpoint, remove in the future
   /filter/v1/subscriptions:
     post: # post_waku_v2_filter_v1_subscription

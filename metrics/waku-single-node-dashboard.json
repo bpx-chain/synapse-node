@@ -70,7 +70,7 @@
       }
     ]
   },
-  "description": "Basic metrics for a single running nwaku node",
+  "description": "Basic metrics for a single running synapse node",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
@@ -405,7 +405,7 @@
           "refId": "C"
         }
       ],
-      "title": "Waku Errors",
+      "title": "Synapse Errors",
       "type": "timeseries"
     },
     {
@@ -647,7 +647,7 @@
           "refId": "A"
         }
       ],
-      "title": "Waku Node Errors",
+      "title": "Synapse Node Errors",
       "type": "timeseries"
     },
     {
@@ -1813,7 +1813,7 @@
           "refId": "A"
         }
       ],
-      "title": "Waku Store Peers",
+      "title": "Synapse Store Peers",
       "type": "timeseries"
     },
     {
@@ -1907,7 +1907,7 @@
           "refId": "A"
         }
       ],
-      "title": "Waku Store Messages",
+      "title": "Synapse Store Messages",
       "type": "timeseries"
     },
     {
@@ -2001,7 +2001,7 @@
           "refId": "A"
         }
       ],
-      "title": "Waku Store Queries (10m rate)",
+      "title": "Synapse Store Queries (10m rate)",
       "type": "timeseries"
     },
     {
@@ -2093,7 +2093,7 @@
           "refId": "A"
         }
       ],
-      "title": "Waku Store Errors (10m rate)",
+      "title": "Synapse Store Errors (10m rate)",
       "type": "timeseries"
     },
     {
@@ -2356,7 +2356,7 @@
         "type": "prometheus",
         "uid": "${DS_NWAKU_PROMETHEUS}"
       },
-      "description": "Waku Filter Peers",
+      "description": "Synapse Filter Peers",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2442,7 +2442,7 @@
           "refId": "A"
         }
       ],
-      "title": "Waku Filter Peers",
+      "title": "Synapse Filter Peers",
       "type": "timeseries"
     },
     {
@@ -2534,7 +2534,7 @@
           "refId": "A"
         }
       ],
-      "title": "Waku Filter Subscribers",
+      "title": "Synapse Filter Subscribers",
       "type": "timeseries"
     },
     {
@@ -2627,7 +2627,7 @@
           "refId": "A"
         }
       ],
-      "title": "Waku Filter Errors",
+      "title": "Synapse Filter Errors",
       "type": "timeseries"
     },
     {
@@ -2745,7 +2745,7 @@
           "refId": "A"
         }
       ],
-      "title": "Waku Lightpush Peers",
+      "title": "Synapse Lightpush Peers",
       "type": "timeseries"
     },
     {
@@ -2837,7 +2837,7 @@
           "refId": "A"
         }
       ],
-      "title": "Waku Lightpush Errors",
+      "title": "Synapse Lightpush Errors",
       "type": "timeseries"
     }
   ],
@@ -2866,7 +2866,7 @@
     ]
   },
   "timezone": "browser",
-  "title": "nwaku single node dashboard",
+  "title": "synapse single node dashboard",
   "uid": "qrp_ZCTGz",
   "version": 10,
   "weekStart": ""

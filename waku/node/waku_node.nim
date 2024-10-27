@@ -52,22 +52,22 @@ declarePublicCounter waku_node_messages, "number of messages received", ["type"]
 declarePublicHistogram waku_histogram_message_size, "message size histogram in kB",
   buckets = [0.0, 5.0, 15.0, 50.0, 100.0, 300.0, 700.0, 1000.0, Inf]
 
-declarePublicGauge waku_version, "Waku version info (in git describe format)", ["version"]
-declarePublicGauge waku_node_errors, "number of wakunode errors", ["type"]
+declarePublicGauge waku_version, "Synapse version info (in git describe format)", ["version"]
+declarePublicGauge waku_node_errors, "number of synapse node errors", ["type"]
 declarePublicGauge waku_lightpush_peers, "number of lightpush peers"
 declarePublicGauge waku_filter_peers, "number of filter peers"
 declarePublicGauge waku_store_peers, "number of store peers"
 declarePublicGauge waku_px_peers, "number of peers (in the node's peerManager) supporting the peer exchange protocol"
 
 logScope:
-  topics = "waku node"
+  topics = "synapse node"
 
 # TODO: Move to application instance (e.g., `WakuNode2`)
 # Git version in git describe format (defined compile time)
 const git_version* {.strdefine.} = "n/a"
 
 # Default clientId
-const clientId* = "Nimbus Waku v2 node"
+const clientId* = "Nimbus Synapse v2 node"
 
 const WakuNodeVersionString* = "version / git commit hash: " & git_version
 
@@ -139,7 +139,7 @@ proc new*(T: type WakuNode,
           # TODO: make this argument required after tests are updated
           rng: ref HmacDrbgContext = crypto.newRng()
           ): T {.raises: [Defect, LPError, IOError, TLSStreamProtocolError].} =
-  ## Creates a Waku Node instance.
+  ## Creates a Synapse Node instance.
 
   info "Initializing networking", addrs= $netConfig.announcedAddresses
 
@@ -182,11 +182,11 @@ proc connectToNodes*(node: WakuNode, nodes: seq[RemotePeerInfo] | seq[string], s
   # NOTE Connects to the node without a give protocol, which automatically creates streams for relay
   await peer_manager.connectToNodes(node.peerManager, nodes, source=source)
 
-## Waku Metadata
+## Synapse Metadata
 
 proc mountMetadata*(node: WakuNode, clusterId: uint32): Result[void, string] =
   if not node.wakuMetadata.isNil():
-    return err("Waku metadata already mounted, skipping")
+    return err("Synapse metadata already mounted, skipping")
 
   let metadata = WakuMetadata.new(clusterId, node.enr, node.topicSubscriptionQueue)
 
@@ -199,7 +199,7 @@ proc mountMetadata*(node: WakuNode, clusterId: uint32): Result[void, string] =
 
   return ok()
 
-## Waku relay
+## Synapse relay
 
 proc registerRelayDefaultHandler(node: WakuNode, topic: PubsubTopic) =
   if node.wakuRelay.isSubscribed(topic):
@@ -246,7 +246,7 @@ proc registerRelayDefaultHandler(node: WakuNode, topic: PubsubTopic) =
 
 proc subscribe*(node: WakuNode, subscription: SubscriptionEvent, handler = none(WakuRelayHandler)) =
   ## Subscribes to a PubSub or Content topic. Triggers handler when receiving messages on
-  ## this topic. WakuRelayHandler is a method that takes a topic and a Waku message.
+  ## this topic. WakuRelayHandler is a method that takes a topic and a Synapse message.
 
   if node.wakuRelay.isNil():
     error "Invalid API call to `subscribe`. WakuRelay not mounted."
@@ -404,7 +404,7 @@ proc mountRelay*(node: WakuNode,
   for pubsubTopic in pubsubTopics:
     node.subscribe((kind: PubsubSub, topic: pubsubTopic))
 
-## Waku filter
+## Synapse filter
 
 proc mountLegacyFilter*(node: WakuNode, filterTimeout: Duration = WakuLegacyFilterTimeout)
                  {.async, raises: [Defect, LPError]} =
@@ -443,7 +443,7 @@ proc filterHandleMessage*(node: WakuNode,
                           {.async.}=
 
   if node.wakuFilter.isNil() or node.wakuFilterLegacy.isNil():
-    error "cannot handle filter message", error="waku filter is nil"
+    error "cannot handle filter message", error="synapse filter is nil"
     return
 
   await allFutures(node.wakuFilter.handleMessage(pubsubTopic, message),
@@ -475,7 +475,7 @@ proc legacyFilterSubscribe*(node: WakuNode,
   ## Registers for messages that match a specific filter.
   ## Triggers the handler whenever a message is received.
   if node.wakuFilterClientLegacy.isNil():
-    error "cannot register filter subscription to topic", error="waku legacy filter client is not set up"
+    error "cannot register filter subscription to topic", error="synapse legacy filter client is not set up"
     return
 
   let remotePeerRes = parsePeerInfo(peer)
@@ -555,7 +555,7 @@ proc filterSubscribe*(node: WakuNode,
 
   ## Registers for messages that match a specific filter. Triggers the handler whenever a message is received.
   if node.wakuFilterClient.isNil():
-    error "cannot register filter subscription to topic", error="waku filter client is not set up"
+    error "cannot register filter subscription to topic", error="synapse filter client is not set up"
     return err(FilterSubscribeError.serviceUnavailable())
 
   let remotePeerRes = parsePeerInfo(peer)
@@ -572,7 +572,7 @@ proc filterSubscribe*(node: WakuNode,
     if subRes.isOk():
       info "v2 subscribed to topic", pubsubTopic=pubsubTopic, contentTopics=contentTopics
 
-      # Purpose is to update Waku Metadata
+      # Purpose is to update Synapse Metadata
       node.topicSubscriptionQueue.emit((kind: PubsubSub, topic: pubsubTopic.get()))
     else:
       error "failed filter v2 subscription", error=subRes.error
@@ -608,7 +608,7 @@ proc filterSubscribe*(node: WakuNode,
     for pubsub, topics in topicMap.pairs:
       info "subscribed to topic", pubsubTopic=pubsub, contentTopics=topics
 
-      # Purpose is to update Waku Metadata
+      # Purpose is to update Synapse Metadata
       node.topicSubscriptionQueue.emit((kind: PubsubSub, topic: $pubsub))
 
     # return the last error or ok
@@ -621,7 +621,7 @@ proc legacyFilterUnsubscribe*(node: WakuNode,
                               {.async, gcsafe, raises: [Defect, ValueError].} =
   ## Unsubscribe from a content legacy filter.
   if node.wakuFilterClientLegacy.isNil():
-    error "cannot unregister filter subscription to content", error="waku filter client is nil"
+    error "cannot unregister filter subscription to content", error="synapse filter client is nil"
     return
 
   let remotePeerRes = parsePeerInfo(peer)
@@ -679,7 +679,7 @@ proc filterUnsubscribe*(node: WakuNode,
 
   ## Unsubscribe from a content filter V2".
   if node.wakuFilterClientLegacy.isNil():
-    error "cannot unregister filter subscription to content", error="waku filter client is nil"
+    error "cannot unregister filter subscription to content", error="synapse filter client is nil"
     return err(FilterSubscribeError.serviceUnavailable())
 
   let remotePeerRes = parsePeerInfo(peer)
@@ -696,7 +696,7 @@ proc filterUnsubscribe*(node: WakuNode,
     if unsubRes.isOk():
       info "unsubscribed from topic", pubsubTopic=pubsubTopic.get(), contentTopics=contentTopics
     
-      # Purpose is to update Waku Metadata
+      # Purpose is to update Synapse Metadata
       node.topicSubscriptionQueue.emit((kind: PubsubUnsub, topic: pubsubTopic.get()))
     else:
       error "failed filter unsubscription", error=unsubRes.error
@@ -733,7 +733,7 @@ proc filterUnsubscribe*(node: WakuNode,
     for pubsub, topics in topicMap.pairs:
       info "unsubscribed from topic", pubsubTopic=pubsub, contentTopics=topics
 
-      # Purpose is to update Waku Metadata
+      # Purpose is to update Synapse Metadata
       node.topicSubscriptionQueue.emit((kind: PubsubUnsub, topic: $pubsub))
 
     # return the last error or ok
@@ -748,7 +748,7 @@ proc filterUnsubscribeAll*(node: WakuNode,
 
   ## Unsubscribe from a content filter V2".
   if node.wakuFilterClientLegacy.isNil():
-    error "cannot unregister filter subscription to content", error="waku filter client is nil"
+    error "cannot unregister filter subscription to content", error="synapse filter client is nil"
     return err(FilterSubscribeError.serviceUnavailable())
 
   let remotePeerRes = parsePeerInfo(peer)
@@ -772,7 +772,7 @@ proc filterUnsubscribeAll*(node: WakuNode,
 # NOTICE: subscribe / unsubscribe methods are removed - they were already depricated
 # yet incompatible to handle both type of filters - use specific filter registration instead
 
-## Waku archive
+## Synapse archive
 proc mountArchive*(node: WakuNode,
                    driver: ArchiveDriver,
                    retentionPolicy = none(RetentionPolicy)):
@@ -787,7 +787,7 @@ proc mountArchive*(node: WakuNode,
   asyncSpawn node.wakuArchive.start()
   return ok()
 
-## Waku store
+## Synapse store
 
 # TODO: Review this mapping logic. Maybe, move it to the appplication code
 proc toArchiveQuery(request: HistoryQuery): ArchiveQuery =
@@ -822,10 +822,10 @@ proc toHistoryResult*(res: ArchiveResult): HistoryResult =
     ))
 
 proc mountStore*(node: WakuNode) {.async, raises: [Defect, LPError].} =
-  info "mounting waku store protocol"
+  info "mounting synapse store protocol"
 
   if node.wakuArchive.isNil():
-    error "failed to mount waku store protocol", error="waku archive not set"
+    error "failed to mount synapse store protocol", error="synapse archive not set"
     return
 
   # TODO: Review this handler logic. Maybe, move it to the appplication code
@@ -854,7 +854,7 @@ proc mountStoreClient*(node: WakuNode) =
 proc query*(node: WakuNode, query: HistoryQuery, peer: RemotePeerInfo): Future[WakuStoreResult[HistoryResponse]] {.async, gcsafe.} =
   ## Queries known nodes for historical messages
   if node.wakuStoreClient.isNil():
-    return err("waku store client is nil")
+    return err("synapse store client is nil")
 
   let queryRes = await node.wakuStoreClient.query(query, peer)
   if queryRes.isErr():
@@ -869,7 +869,7 @@ proc query*(node: WakuNode, query: HistoryQuery): Future[WakuStoreResult[History
   deprecated: "Use 'node.query()' with peer destination instead".} =
   ## Queries known nodes for historical messages
   if node.wakuStoreClient.isNil():
-    return err("waku store client is nil")
+    return err("synapse store client is nil")
 
   let peerOpt = node.peerManager.selectPeer(WakuStoreCodec)
   if peerOpt.isNone():
@@ -881,10 +881,10 @@ proc query*(node: WakuNode, query: HistoryQuery): Future[WakuStoreResult[History
 when defined(waku_exp_store_resume):
   # TODO: Move to application module (e.g., wakunode2.nim)
   proc resume*(node: WakuNode, peerList: Option[seq[RemotePeerInfo]] = none(seq[RemotePeerInfo])) {.async, gcsafe.} =
-    ## resume proc retrieves the history of waku messages published on the default waku pubsub topic since the last time the waku node has been online
-    ## for resume to work properly the waku node must have the store protocol mounted in the full mode (i.e., persisting messages)
+    ## resume proc retrieves the history of synapse messages published on the default synapse pubsub topic since the last time the synapse node has been online
+    ## for resume to work properly the synapse node must have the store protocol mounted in the full mode (i.e., persisting messages)
     ## messages are stored in the wakuStore's messages field and in the message db
-    ## the offline time window is measured as the difference between the current time and the timestamp of the most recent persisted waku message
+    ## the offline time window is measured as the difference between the current time and the timestamp of the most recent persisted synapse message
     ## an offset of 20 second is added to the time window to count for nodes asynchrony
     ## peerList indicates the list of peers to query from. The history is fetched from the first available peer in this list. Such candidates should be found through a discovery method (to be developed).
     ## if no peerList is passed, one of the peers in the underlying peer manager unit of the store protocol is picked randomly to fetch the history from.
@@ -900,7 +900,7 @@ when defined(waku_exp_store_resume):
     info "the number of retrieved messages since the last online time: ", number=retrievedMessages.value
 
 
-## Waku lightpush
+## Synapse lightpush
 
 proc mountLightPush*(node: WakuNode) {.async.} =
   info "mounting light push"
@@ -909,7 +909,7 @@ proc mountLightPush*(node: WakuNode) {.async.} =
   if node.wakuRelay.isNil():
     debug "mounting lightpush without relay (nil)"
     pushHandler = proc(peer: PeerId, pubsubTopic: string, message: WakuMessage): Future[WakuLightPushResult[void]] {.async.} =
-      return err("no waku relay found")
+      return err("no synapse relay found")
   else:
     pushHandler = proc(peer: PeerId, pubsubTopic: string, message: WakuMessage): Future[WakuLightPushResult[void]] {.async.} =
       let publishedCount = await node.wakuRelay.publish(pubsubTopic, message.encode().buffer)
@@ -941,7 +941,7 @@ proc lightpushPublish*(node: WakuNode, pubsubTopic: Option[PubsubTopic], message
   ## `WakuMessage` should contain a `contentTopic` field for light node
   ## functionality.
   if node.wakuLightpushClient.isNil():
-    return err("waku lightpush client is nil")
+    return err("synapse lightpush client is nil")
 
   if pubsubTopic.isSome():
     debug "publishing message with lightpush", pubsubTopic=pubsubTopic.get(), contentTopic=message.contentTopic, peer=peer.peerId
@@ -962,7 +962,7 @@ proc lightpushPublish*(node: WakuNode, pubsubTopic: Option[PubsubTopic], message
 proc lightpushPublish*(node: WakuNode, pubsubTopic: Option[PubsubTopic], message: WakuMessage): Future[WakuLightPushResult[void]] {.async, gcsafe,
   deprecated: "Use 'node.lightpushPublish()' instead".} =
   if node.wakuLightpushClient.isNil():
-    let msg = "waku lightpush client is nil"
+    let msg = "synapse lightpush client is nil"
     error "failed to publish message", msg=msg
     return err(msg)
 
@@ -980,7 +980,7 @@ proc lightpushPublish*(node: WakuNode, pubsubTopic: Option[PubsubTopic], message
   return publishRes
 
 
-## Waku RLN Relay
+## Synapse RLN Relay
 proc mountRlnRelay*(node: WakuNode,
                     rlnConf: WakuRlnConfig,
                     spamHandler = none(SpamHandler),
@@ -1003,10 +1003,10 @@ proc mountRlnRelay*(node: WakuNode,
   
   node.wakuRlnRelay = rlnRelay
 
-## Waku peer-exchange
+## Synapse peer-exchange
 
 proc mountPeerExchange*(node: WakuNode) {.async, raises: [Defect, LPError].} =
-  info "mounting waku peer exchange"
+  info "mounting synapse peer exchange"
 
   node.wakuPeerExchange = WakuPeerExchange.new(node.peerManager)
 
@@ -1017,7 +1017,7 @@ proc mountPeerExchange*(node: WakuNode) {.async, raises: [Defect, LPError].} =
 
 proc fetchPeerExchangePeers*(node: Wakunode, amount: uint64) {.async, raises: [Defect].} =
   if node.wakuPeerExchange.isNil():
-    error "could not get peers from px, waku peer-exchange is nil"
+    error "could not get peers from px, synapse peer-exchange is nil"
     return
 
   info "Retrieving peer info via peer exchange protocol"
@@ -1037,7 +1037,7 @@ proc fetchPeerExchangePeers*(node: Wakunode, amount: uint64) {.async, raises: [D
 # TODO: Move to application module (e.g., wakunode2.nim)
 proc setPeerExchangePeer*(node: WakuNode, peer: RemotePeerInfo|string) =
   if node.wakuPeerExchange.isNil():
-    error "could not set peer, waku peer-exchange is nil"
+    error "could not set peer, synapse peer-exchange is nil"
     return
 
   info "Set peer-exchange peer", peer=peer
@@ -1140,11 +1140,11 @@ proc printNodeNetworkInfo*(node: WakuNode): void =
   info "DNS: discoverable ENR ", enr = node.enr.toUri()
 
 proc start*(node: WakuNode) {.async.} =
-  ## Starts a created Waku Node and
+  ## Starts a created Synapse Node and
   ## all its mounted protocols.
 
   waku_version.set(1, labelValues=[git_version])
-  info "Starting Waku node", version=git_version
+  info "Starting Synapse node", version=git_version
 
   var zeroPortPresent = false
   for address in node.announcedAddresses:

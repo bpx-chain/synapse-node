@@ -1,4 +1,4 @@
-## Waku Relay module. Thin layer on top of GossipSub.
+## Synapse Relay module. Thin layer on top of GossipSub.
 ##
 ## See https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-relay.md
 ## for spec.
@@ -26,7 +26,7 @@ import
 
 
 logScope:
-  topics = "waku relay"
+  topics = "synapse relay"
 
 const
   WakuRelayCodec* = "/vac/waku/relay/2.0.0"
@@ -223,7 +223,7 @@ proc validateMessage*(w: WakuRelay, pubsubTopic: string, msg: WakuMessage):
 
     if messageSizeBytes > w.maxMessageSize:
       let message = fmt"Message size exceeded maximum of {w.maxMessageSize} bytes"
-      debug "Invalid Waku Message", error=message
+      debug "Invalid Synapse Message", error=message
       return err(message)
 
     for (validator, message) in w.wakuValidators:

@@ -29,7 +29,7 @@ from std/times import toUnix
 export types
 
 logScope:
-  topics = "waku node rest relay_api"
+  topics = "synapse node rest relay_api"
 
 ##### Topic cache
 

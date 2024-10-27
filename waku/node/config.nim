@@ -83,7 +83,7 @@ proc init*(T: type NetConfig,
     discv5UdpPort = none(Port),
     clusterId: uint32 = 0,
     wakuFlags = none(CapabilitiesBitfield)): NetConfigResult =
-  ## Initialize and validate waku node network configuration
+  ## Initialize and validate synapse node network configuration
 
   # Bind addresses
   let hostAddress = ip4TcpEndPoint(bindIp, bindPort)

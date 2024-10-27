@@ -85,7 +85,7 @@ proc new*(T: type ArchiveDriver,
       if migrateRes.isErr():
         return err("error in migrate sqlite: " & $migrateRes.error)
 
-    debug "setting up sqlite waku archive driver"
+    debug "setting up sqlite synapse archive driver"
     let res = SqliteDriver.new(db)
     if res.isErr():
       return err("failed to init sqlite archive driver: " & res.error)
@@ -127,7 +127,7 @@ proc new*(T: type ArchiveDriver,
       return err("Postgres has been configured but not been compiled. Check compiler definitions.")
 
   else:
-    debug "setting up in-memory waku archive driver"
+    debug "setting up in-memory synapse archive driver"
     let driver = QueueDriver.new()  # Defaults to a capacity of 25.000 messages
     return ok(driver)
 

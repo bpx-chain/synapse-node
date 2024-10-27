@@ -13,7 +13,7 @@ import
   ../common/paging
 
 
-## Waku message digest
+## Synapse message digest
 # TODO: Move this into the driver implementations. We should be passing
 #  here a buffer containing a serialized implementation dependent cursor.
 
@@ -44,7 +44,7 @@ type DbCursor = object
 
 type
   # TODO: We should be passing here a buffer containing a serialized
-  # implementation dependent cursor. Waku archive logic should be independent
+  # implementation dependent cursor. Synapse archive logic should be independent
   # of the cursor format.
   ArchiveCursor* = DbCursor
 

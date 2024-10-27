@@ -14,6 +14,6 @@ import
   ../rest_serdes
 
 logScope:
-  topics = "waku node rest health_api"
+  topics = "synapse node rest health_api"
 
 proc healthCheck*(): RestResponse[string] {.rest, endpoint: "/health", meth: HttpMethod.MethodGet.}

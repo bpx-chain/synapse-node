@@ -21,7 +21,7 @@ export types
 
 
 logScope:
-  topics = "waku node rest client"
+  topics = "synapse node rest client"
 
 
 proc encodeBytes*(value: seq[PubSubTopic],

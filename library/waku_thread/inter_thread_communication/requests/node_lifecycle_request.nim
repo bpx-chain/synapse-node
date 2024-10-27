@@ -85,13 +85,13 @@ proc configureStore(node: WakuNode,
   let mountArcRes = node.mountArchive(archiveDriverRes.get(),
                                       retPolicyRes.get())
   if mountArcRes.isErr():
-    return err("failed to mount waku archive protocol: " & mountArcRes.error)
+    return err("failed to mount synapse archive protocol: " & mountArcRes.error)
 
   # Store setup
   try:
     await mountStore(node)
   except CatchableError:
-    return err("failed to mount waku store protocol: " & getCurrentExceptionMsg())
+    return err("failed to mount synapse store protocol: " & getCurrentExceptionMsg())
 
   mountStoreClient(node)
   if storeNode != "":
@@ -99,7 +99,7 @@ proc configureStore(node: WakuNode,
     if storeNodeInfo.isOk():
       node.peerManager.addServicePeer(storeNodeInfo.value, WakuStoreCodec)
     else:
-      return err("failed to set node waku store peer: " & storeNodeInfo.error)
+      return err("failed to set node synapse store peer: " & storeNodeInfo.error)
 
   return ok()
 
@@ -182,7 +182,7 @@ proc createNode(configJson: cstring):
 
   let wakuNodeRes = builder.build()
   if wakuNodeRes.isErr():
-    let errorMsg = "failed to create waku node instance: " & wakuNodeRes.error
+    let errorMsg = "failed to create synapse node instance: " & wakuNodeRes.error
     return err(errorMsg)
 
   var newNode = wakuNodeRes.get()

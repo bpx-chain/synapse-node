@@ -1,9 +1,0 @@
-/README.md
-/Dockerfile
-/.*ignore
-/LICENSE*
-/tests
-/metrics
-/nimcache
-librln*
-**/vendor/*

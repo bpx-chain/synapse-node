@@ -1,4 +1,4 @@
-## Waku Filter protocol for subscribing and filtering messages
+## Synapse Filter protocol for subscribing and filtering messages
 
 when (NimMajor, NimMinor) < (1, 4):
   {.push raises: [Defect].}
@@ -22,7 +22,7 @@ import
   ./subscriptions
 
 logScope:
-  topics = "waku filter"
+  topics = "synapse filter"
 
 const
   MaxContentTopicsPerRequest* = 100

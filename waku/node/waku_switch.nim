@@ -1,4 +1,4 @@
-# Waku Switch utils.
+# Synapse Switch utils.
 when (NimMajor, NimMinor) < (1, 4):
   {.push raises: [Defect].}
 else:

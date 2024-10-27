@@ -23,10 +23,10 @@ export protocol, waku_enr
 
 
 declarePublicGauge waku_discv5_discovered, "number of nodes discovered"
-declarePublicGauge waku_discv5_errors, "number of waku discv5 errors", ["type"]
+declarePublicGauge waku_discv5_errors, "number of synapse discv5 errors", ["type"]
 
 logScope:
-  topics = "waku discv5"
+  topics = "synapse discv5"
 
 
 ## Config

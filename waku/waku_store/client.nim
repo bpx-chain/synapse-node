@@ -25,10 +25,10 @@ when defined(waku_exp_store_resume):
 
 
 logScope:
-  topics = "waku store client"
+  topics = "synapse store client"
 
 
-const DefaultPageSize*: uint = 20 # A recommended default number of waku messages per page
+const DefaultPageSize*: uint = 20 # A recommended default number of synapse messages per page
 
 
 type WakuStoreClient* = ref object
@@ -165,9 +165,9 @@ when defined(waku_exp_store_resume):
               peerList = none(seq[RemotePeerInfo]),
               pageSize = DefaultPageSize,
               pubsubTopic = DefaultPubsubTopic): Future[WakuStoreResult[uint64]] {.async, gcsafe.} =
-    ## resume proc retrieves the history of waku messages published on the default waku pubsub topic since the last time the waku store node has been online
+    ## resume proc retrieves the history of synapse messages published on the default synapse pubsub topic since the last time the synapse store node has been online
     ## messages are stored in the store node's messages field and in the message db
-    ## the offline time window is measured as the difference between the current time and the timestamp of the most recent persisted waku message
+    ## the offline time window is measured as the difference between the current time and the timestamp of the most recent persisted synapse message
     ## an offset of 20 second is added to the time window to count for nodes asynchrony
     ## peerList indicates the list of peers to query from.
     ## The history is fetched from all available peers in this list and then consolidated into one deduplicated list.

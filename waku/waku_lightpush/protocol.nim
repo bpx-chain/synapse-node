@@ -20,7 +20,7 @@ import
   ./protocol_metrics
   
 logScope:
-  topics = "waku lightpush"
+  topics = "synapse lightpush"
 
 type WakuLightPush* = ref object of LPProtocol
     rng*: ref rand.HmacDrbgContext

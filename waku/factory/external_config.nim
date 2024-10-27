@@ -128,11 +128,11 @@ type
       ## General node config
       clusterId* {.
         desc: "Cluster id that the node is running in. Node in a different cluster id is disconnected."
-        defaultValue: 0
+        defaultValue: 279
         name: "cluster-id" }: uint32
 
       agentString* {.
-        defaultValue: "nwaku",
+        defaultValue: "synapse",
         desc: "Node agent string which is used as identifier in network"
         name: "agent-string" .}: string
 
@@ -290,8 +290,8 @@ type
       ## Store and message store config
 
       store* {.
-        desc: "Enable/disable waku store protocol",
-        defaultValue: false,
+        desc: "Enable/disable synapse store protocol",
+        defaultValue: true,
         name: "store" }: bool
 
       storenode* {.
@@ -301,7 +301,7 @@ type
 
       storeMessageRetentionPolicy* {.
         desc: "Message store retention policy. Time retention policy: 'time:<seconds>'. Capacity retention policy: 'capacity:<count>'. Size retention policy: 'size:<xMB/xGB>'. Set to 'none' to disable.",
-        defaultValue: "time:" & $2.days.seconds,
+        defaultValue: "size:5GB",
         name: "store-message-retention-policy" }: string
 
       storeMessageDbUrl* {.
@@ -328,7 +328,7 @@ type
 
       filter* {.
         desc: "Enable filter protocol: true|false",
-        defaultValue: false
+        defaultValue: true
         name: "filter" }: bool
 
       filternode* {.
@@ -360,7 +360,7 @@ type
 
       lightpush* {.
         desc: "Enable lightpush protocol: true|false",
-        defaultValue: false
+        defaultValue: true
         name: "lightpush" }: bool
 
       lightpushnode* {.
@@ -371,7 +371,7 @@ type
       ## REST HTTP config
 
       rest* {.
-        desc: "Enable Waku REST HTTP server: true|false",
+        desc: "Enable Synapse REST HTTP server: true|false",
         defaultValue: false
         name: "rest" }: bool
 
@@ -451,7 +451,7 @@ type
 
       discv5Discovery* {.
         desc: "Enable discovering nodes via Node Discovery v5"
-        defaultValue: false
+        defaultValue: true
         name: "discv5-discovery" }: bool
 
       discv5UdpPort* {.
@@ -488,9 +488,9 @@ type
         defaultValue: 1
         name: "discv5-bits-per-hop" .}: int
 
-      ## waku peer exchange config
+      ## synapse peer exchange config
       peerExchange* {.
-        desc: "Enable waku peer exchange protocol (responder side): true|false",
+        desc: "Enable synapse peer exchange protocol (responder side): true|false",
         defaultValue: false
         name: "peer-exchange" }: bool
 

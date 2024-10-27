@@ -32,19 +32,17 @@ else # "variables.mk" was included. Business as usual until the end of this file
 ##########
 ## Main ##
 ##########
-.PHONY: all test update clean
+.PHONY: all update clean
 
 # default target, because it's the first one that doesn't start with '.'
-all: | wakunode2 example2 chat2 chat2bridge libwaku
+all: | synapse libwaku
 
-test: | testcommon testwaku
-
-waku.nims:
-	ln -s waku.nimble $@
+synapse.nims:
+	ln -s synapse.nimble $@
 
 update: | update-common
-	rm -rf waku.nims && \
-		$(MAKE) waku.nims $(HANDLE_OUTPUT)
+	rm -rf synapse.nims && \
+		$(MAKE) synapse.nims $(HANDLE_OUTPUT)
 
 clean:
 	rm -rf build
@@ -98,7 +96,7 @@ ifeq (, $(shell which anvil))
 	./scripts/install_anvil.sh
 endif
 
-deps: | deps-common nat-libs waku.nims
+deps: | deps-common nat-libs synapse.nims
 
 
 ### nim-libbacktrace
@@ -166,111 +164,35 @@ clean-librln:
 clean: | clean-librln
 
 
-#################
-## Waku Common ##
-#################
-.PHONY: testcommon
-
-testcommon: | build deps
-	echo -e $(BUILD_MSG) "build/$@" && \
-		$(ENV_SCRIPT) nim testcommon $(NIM_PARAMS) waku.nims
-
-
 ##########
-## Waku ##
+## Synapse ##
 ##########
-.PHONY: testwaku wakunode2 testwakunode2 example2 chat2 chat2bridge
+.PHONY: synapse
 
-# install anvil only for the testwaku target
-testwaku: | build deps anvil librln
+synapse: | build deps librln
 	echo -e $(BUILD_MSG) "build/$@" && \
-		$(ENV_SCRIPT) nim test -d:os=$(shell uname) $(NIM_PARAMS) waku.nims
-
-wakunode2: | build deps librln
-	echo -e $(BUILD_MSG) "build/$@" && \
-		$(ENV_SCRIPT) nim wakunode2 $(NIM_PARAMS) waku.nims
-
-benchmarks: | build deps librln
-	echo -e $(BUILD_MSG) "build/$@" && \
-		$(ENV_SCRIPT) nim benchmarks $(NIM_PARAMS) waku.nims
-
-testwakunode2: | build deps librln
-	echo -e $(BUILD_MSG) "build/$@" && \
-		$(ENV_SCRIPT) nim testwakunode2 $(NIM_PARAMS) waku.nims
-
-example2: | build deps librln
-	echo -e $(BUILD_MSG) "build/$@" && \
-		$(ENV_SCRIPT) nim example2 $(NIM_PARAMS) waku.nims
-
-chat2: | build deps librln
-	echo -e $(BUILD_MSG) "build/$@" && \
-		$(ENV_SCRIPT) nim chat2 $(NIM_PARAMS) waku.nims
+		$(ENV_SCRIPT) nim synapse $(NIM_PARAMS) synapse.nims
 
 rln-db-inspector: | build deps librln
 	echo -e $(BUILD_MSG) "build/$@" && \
-	$(ENV_SCRIPT) nim rln_db_inspector $(NIM_PARAMS) waku.nims
-
-chat2bridge: | build deps librln
-	echo -e $(BUILD_MSG) "build/$@" && \
-		$(ENV_SCRIPT) nim chat2bridge $(NIM_PARAMS) waku.nims
+	$(ENV_SCRIPT) nim rln_db_inspector $(NIM_PARAMS) synapse.nims
 
 
 ################
-## Waku tools ##
+## Synapse tools ##
 ################
-.PHONY: tools wakucanary networkmonitor
+.PHONY: tools synapsecanary networkmonitor
 
-tools: networkmonitor wakucanary
+tools: networkmonitor synapsecanary
 
-wakucanary: | build deps librln
+synapsecanary: | build deps librln
 	echo -e $(BUILD_MSG) "build/$@" && \
-		$(ENV_SCRIPT) nim wakucanary $(NIM_PARAMS) waku.nims
+		$(ENV_SCRIPT) nim synapsecanary $(NIM_PARAMS) synapse.nims
 
 networkmonitor: | build deps librln
 	echo -e $(BUILD_MSG) "build/$@" && \
-		$(ENV_SCRIPT) nim networkmonitor $(NIM_PARAMS) waku.nims
+		$(ENV_SCRIPT) nim networkmonitor $(NIM_PARAMS) synapse.nims
 
-
-###################
-## Documentation ##
-###################
-.PHONY: docs coverage
-
-# TODO: Remove unused target
-docs: | build deps
-	echo -e $(BUILD_MSG) "build/$@" && \
-		$(ENV_SCRIPT) nim doc --run --index:on --project --out:.gh-pages waku/waku.nim waku.nims
-
-coverage:
-	echo -e $(BUILD_MSG) "build/$@" && \
-		$(ENV_SCRIPT) ./scripts/run_cov.sh -y
-
-
-#####################
-## Container image ##
-#####################
-# -d:insecure - Necessary to enable Prometheus HTTP endpoint for metrics
-# -d:chronicles_colors:none - Necessary to disable colors in logs for Docker
-DOCKER_IMAGE_NIMFLAGS ?= -d:chronicles_colors:none -d:insecure -d:postgres
-DOCKER_IMAGE_NIMFLAGS := $(DOCKER_IMAGE_NIMFLAGS) $(HEAPTRACK_PARAMS)
-
-# build a docker image for the fleet
-docker-image: MAKE_TARGET ?= wakunode2
-docker-image: DOCKER_IMAGE_TAG ?= $(MAKE_TARGET)-$(GIT_VERSION)
-docker-image: DOCKER_IMAGE_NAME ?= wakuorg/nwaku:$(DOCKER_IMAGE_TAG)
-docker-image:
-	docker build \
-		--build-arg="MAKE_TARGET=$(MAKE_TARGET)" \
-		--build-arg="NIMFLAGS=$(DOCKER_IMAGE_NIMFLAGS)" \
-		--build-arg="NIM_COMMIT=$(DOCKER_NIM_COMMIT)" \
-		--build-arg="LOG_LEVEL=$(LOG_LEVEL)" \
-		--label="commit=$(shell git rev-parse HEAD)" \
-		--label="version=$(GIT_VERSION)" \
-		--target $(TARGET) \
-		--tag $(DOCKER_IMAGE_NAME) .
-
-docker-push:
-	docker push $(DOCKER_IMAGE_NAME)
 
 
 ################
@@ -284,54 +206,10 @@ libwaku: | build deps librln
 		rm -f build/libwaku*
 ifeq ($(STATIC), true)
 		echo -e $(BUILD_MSG) "build/$@.a" && \
-		$(ENV_SCRIPT) nim libwakuStatic $(NIM_PARAMS) waku.nims
+		$(ENV_SCRIPT) nim libwakuStatic $(NIM_PARAMS) synapse.nims
 else
 		echo -e $(BUILD_MSG) "build/$@.so" && \
-		$(ENV_SCRIPT) nim libwakuDynamic $(NIM_PARAMS) waku.nims
+		$(ENV_SCRIPT) nim libwakuDynamic $(NIM_PARAMS) synapse.nims
 endif
 
-cwaku_example: | build libwaku
-	echo -e $(BUILD_MSG) "build/$@" && \
-		cc -o "build/$@" \
-		./examples/cbindings/waku_example.c \
-		./examples/cbindings/base64.c \
-		-lwaku -Lbuild/ \
-		-pthread -ldl -lm \
-		-lminiupnpc -Lvendor/nim-nat-traversal/vendor/miniupnp/miniupnpc/build/ \
-		-lnatpmp -Lvendor/nim-nat-traversal/vendor/libnatpmp-upstream/ \
-		vendor/nim-libbacktrace/libbacktrace_wrapper.o \
-		vendor/nim-libbacktrace/install/usr/lib/libbacktrace.a
-
-cppwaku_example: | build libwaku
-	echo -e $(BUILD_MSG) "build/$@" && \
-		g++ -o "build/$@" \
-		./examples/cpp/waku.cpp \
-		./examples/cpp/base64.cpp \
-		-lwaku -Lbuild/ \
-		-pthread -ldl -lm \
-		-lminiupnpc -Lvendor/nim-nat-traversal/vendor/miniupnp/miniupnpc/build/ \
-		-lnatpmp -Lvendor/nim-nat-traversal/vendor/libnatpmp-upstream/ \
-		vendor/nim-libbacktrace/libbacktrace_wrapper.o \
-		vendor/nim-libbacktrace/install/usr/lib/libbacktrace.a
-
-nodejswaku: | build deps
-		echo -e $(BUILD_MSG) "build/$@" && \
-		node-gyp build --directory=examples/nodejs/
-
 endif # "variables.mk" was not included
-
-###################
-# Release Targets #
-###################
-
-release-notes:
-	docker run \
-		-it \
-		--rm \
-		-v $${PWD}:/opt/sv4git/repo:z \
-		-u $(shell id -u) \
-		docker.io/wakuorg/sv4git:latest \
-			release-notes |\
-			sed -E 's@#([0-9]+)@[#\1](https://github.com/waku-org/nwaku/issues/\1)@g'
-# I could not get the tool to replace issue ids with links, so using sed for now,
-# asked here: https://github.com/bvieira/sv4git/discussions/101

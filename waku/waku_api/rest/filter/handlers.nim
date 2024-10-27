@@ -30,7 +30,7 @@ import
 export types
 
 logScope:
-  topics = "waku node rest filter_api_v2"
+  topics = "synapse node rest filter_api_v2"
 
 const futTimeoutForSubscriptionProcessing* = 5.seconds
 

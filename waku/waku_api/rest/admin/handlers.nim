@@ -28,7 +28,7 @@ import
 export types
 
 logScope:
-  topics = "waku node rest admin api"
+  topics = "synapse node rest admin api"
 
 const ROUTE_ADMIN_V1_PEERS* = "/admin/v1/peers"
 const ROUTE_ADMIN_V1_FILTER_SUBS* = "/admin/v1/filter/subscriptions"

@@ -93,7 +93,7 @@
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Waku Peers #0",
+      "title": "Synapse Peers #0",
       "type": "gauge"
     },
     {
@@ -284,7 +284,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Waku Messages #0",
+      "title": "Synapse Messages #0",
       "tooltip": {
         "shared": true,
         "sort": 1,
@@ -402,7 +402,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Waku Peers #0",
+      "title": "Synapse Peers #0",
       "tooltip": {
         "shared": true,
         "sort": 1,
@@ -524,7 +524,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Waku Errors #0",
+      "title": "Synapse Errors #0",
       "tooltip": {
         "shared": true,
         "sort": 1,
@@ -632,7 +632,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Waku Node #0",
+      "title": "Synapse Node #0",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -888,7 +888,7 @@
         "y": 14
       },
       "type": "graph",
-      "title": "Waku Swap Accounts #0",
+      "title": "Synapse Swap Accounts #0",
       "thresholds": [],
       "pluginVersion": "8.0.0-beta2",
       "legend": {
@@ -1003,7 +1003,7 @@
     ]
   },
   "timezone": "",
-  "title": "Waku Node2",
+  "title": "Synapse Node2",
   "uid": "K7Z6IoBZk",
   "version": 8
 }

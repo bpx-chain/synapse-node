@@ -11,7 +11,7 @@ import
 
 
 logScope:
-  topics = "waku archive migration"
+  topics = "synapse archive migration"
 
 
 const SchemaVersion* = 8 # increase this when there is an update in the database schema
@@ -22,7 +22,7 @@ const MessageStoreMigrationPath: string = projectRoot / "migrations" / "message_
 proc isSchemaVersion7*(db: SqliteDatabase): DatabaseResult[bool] =
   ## Temporary proc created to analyse when the table actually belongs to the SchemaVersion 7.
   ##
-  ## During many nwaku versions, 0.14.0 until 0.18.0, the SchemaVersion wasn't set or checked.
+  ## During many synapse versions, 0.14.0 until 0.18.0, the SchemaVersion wasn't set or checked.
   ## Docker `nwaku` nodes that start working from these versions, 0.14.0 until 0.18.0, they started
   ## with this discrepancy: `user_version`== 0 (not set) but Message table with SchemaVersion 7.
   ##

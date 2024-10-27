@@ -21,7 +21,7 @@ import
   ./protocol_metrics
 
 logScope:
-  topics = "waku filter client"
+  topics = "synapse filter client"
 
 
 const Defaultstring = "/waku/2/default-waku/proto"

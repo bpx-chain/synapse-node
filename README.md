@@ -1,92 +1,62 @@
-# Nwaku
+# BPX Synapse node
 
-## Introduction
+![Synapse](./logo.svg)
 
-The nwaku repository implements Waku, and provides tools related to it.
+Official Nim implementation of the Synapse network node.
 
-- A Nim implementation of the [Waku (v2) protocol](https://specs.vac.dev/specs/waku/v2/waku-v2.html).
-- CLI application `wakunode2` that allows you to run a Waku node.
-- Examples of Waku usage.
-- Various tests of above.
+Synapse is a real time off-chain communication layer for BPX chain DApps.
 
-For more details see the [source code](waku/v2/README.md)
+## Installation
 
-## How to Build & Run
-
-These instructions are generic. For more detailed instructions, see the Waku source code above.
-
-### Prerequisites
-
-The standard developer tools, including a C compiler, GNU Make, Bash, and Git. More information on these installations can be found [here](https://docs.waku.org/guides/nwaku/build-source#install-dependencies).
-
-### Wakunode
+The Linux binary release is built for Ubuntu >=20.04 and Debian >=11. Other distributions with `glibc` version 2.31 or higher should also be supported.
+Please install required dependencies before starting Synapse node:
 
 ```bash
-# The first `make` invocation will update all Git submodules.
-# You'll run `make update` after each `git pull` in the future to keep those submodules updated.
-make wakunode2
-
-# Build with custom compilation flags. Do not use NIM_PARAMS unless you know what you are doing.
-# Replace with your own flags
-make wakunode2 NIMFLAGS="-d:chronicles_colors:none -d:disableMarchNative"
-
-# Run with DNS bootstrapping
-./build/wakunode2 --dns-discovery --dns-discovery-url=DNS_BOOTSTRAP_NODE_URL
-
-# See available command line options
-./build/wakunode2 --help
+sudo apt-get install libpq5 libpcre3
 ```
-To join the network, you need to know the address of at least one bootstrap node.
-Please refer to the [Waku README](https://github.com/waku-org/nwaku/blob/master/waku/README.md) for more information.
 
-For more on how to run `wakunode2`, refer to:
-- [Run using binaries](https://docs.waku.org/guides/nwaku/build-source)
-- [Run using docker](https://docs.waku.org/guides/nwaku/run-docker)
-- [Run using docker-compose](https://docs.waku.org/guides/nwaku/run-docker-compose)
+## Building the source
 
-#### Issues
-##### WSL
-If you encounter difficulties building the project on WSL, consider placing the project within WSL's filesystem, avoiding the `/mnt/` directory.
-
-### Developing
-
-#### Nim Runtime
-This repository is bundled with a Nim runtime that includes the necessary dependencies for the project.
-
-Before you can utilise the runtime you'll need to build the project, as detailed in a previous section. This will generate a `vendor` directory containing various dependencies, including the `nimbus-build-system` which has the bundled nim runtime.
-
-After successfully building the project, you may bring the bundled runtime into scope by running:
-```bash
-source env.sh
-```
-If everything went well, you should see your prompt suffixed with `[Nimbus env]$`. Now you can run `nim` commands as usual.
-
-### Waku Protocol Test Suite
+Make sure you have the standard developer tools installed, including a C compiler, GNU Make, Bash, and Git.
+The first `make` invocation will update all Git submodules. You'll run `make update` after each `git pull` in the future to keep those submodules updated.
 
 ```bash
-# Run all the Waku tests
-make test
+git clone https://github.com/bpx-chain/synapse-node
+cd synapse-node
+make synapse
 ```
 
-### Examples
+## Usage
 
-Examples can be found in the examples folder.
-This includes a fully featured chat example.
+Run a node with default options:
+```bash
+./synapse
+```
 
-### Tools
+When a node private key is not set, the node will generate a new key every time it starts. You can generate a permanent key with the command:
+```bash
+openssl rand -hex 32
+```
+Then provide it each time you run the node:
+```bash
+--nodekey=6b07cb57dfa4cf2d93f5a659ab953f7f9519255adaabf9535c1256deb1b26c5d
+```
 
-Different tools and their corresponding how-to guides can be found in the `tools` folder.
+You can adjust how much disk space can be used to store messages waiting for offline users (5GB by default):
+```bash
+--store-message-retention-policy=size:20GB
+```
 
-### Bugs, Questions & Features
+To allow browser-based DApps to connect to your node, enable the WebSocket server. First, assign a domain to your server and obtain a SSL certificate for it:
+```bash
+certbot certonly --standalone -d synapse.example.com
+```
+Then run Synapse with additional arguments:
+```bash
+--websocket-support=true --websocket-secure-support=true --websocket-secure-key-path=/etc/letsencrypt/live/synapse.example.com/privkey.pem --websocket-secure-cert-path=/etc/letsencrypt/live/synapse.example.com/fullchain.pem
+```
 
-For an inquiry, or if you would like to propose new features, feel free to [open a general issue](https://github.com/waku-org/nwaku/issues/new).
-
-For bug reports, please [tag your issue with the `bug` label](https://github.com/waku-org/nwaku/issues/new).
-
-If you believe the reported issue requires critical attention, please [use the `critical` label](https://github.com/waku-org/nwaku/issues/new?labels=critical,bug) to assist with triaging.
-
-To get help, or participate in the conversation, join the [Waku Discord](https://discord.waku.org/) server.
-
-### Docs
-
-* [REST API Documentation](https://waku-org.github.io/waku-rest-api/)
+The complete startup command for a production Synapse node might look like this:
+```bash
+./synapse --nodekey=6b07cb57dfa4cf2d93f5a659ab953f7f9519255adaabf9535c1256deb1b26c5d --store-message-retention-policy=size:20GB --websocket-support=true --websocket-secure-support=true --websocket-secure-key-path=/etc/letsencrypt/live/synapse.example.com/privkey.pem --websocket-secure-cert-path=/etc/letsencrypt/live/synapse.example.com/fullchain.pem
+```

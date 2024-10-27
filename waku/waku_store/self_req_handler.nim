@@ -9,7 +9,7 @@
 ## server is acting as a store-client. In this module, we allow that
 ## such REST-store node can act as store-server as well by retrieving
 ## its own stored messages. The typical use case for that is when
-## using `nwaku-compose`, which spawn a Waku node connected to a local
+## using `nwaku-compose`, which spawn a Synapse node connected to a local
 ## database, and the user is interested in retrieving the messages
 ## stored by that local store node.
 ##

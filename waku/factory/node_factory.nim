@@ -53,7 +53,7 @@ proc retrieveDynamicBootstrapNodes*(dnsDiscovery: bool,
 
   if dnsDiscovery and dnsDiscoveryUrl != "":
     # DNS discovery
-    debug "Discovering nodes using Waku DNS discovery", url=dnsDiscoveryUrl
+    debug "Discovering nodes using Synapse DNS discovery", url=dnsDiscoveryUrl
 
     var nameServers: seq[TransportAddress]
     for ip in dnsDiscoveryNameServers:
@@ -71,12 +71,12 @@ proc retrieveDynamicBootstrapNodes*(dnsDiscovery: bool,
       return wakuDnsDiscovery.get().findPeers()
         .mapErr(proc (e: cstring): string = $e)
     else:
-      warn "Failed to init Waku DNS discovery"
+      warn "Failed to init Synapse DNS discovery"
 
   debug "No method for retrieving dynamic bootstrap nodes specified."
   ok(newSeq[RemotePeerInfo]()) # Return an empty seq by default
 
-## Init waku node instance
+## Init synapse node instance
 
 proc initNode*(conf: WakuNodeConf,
               netConfig: NetConfig,
@@ -86,7 +86,7 @@ proc initNode*(conf: WakuNodeConf,
               peerStore: Option[WakuPeerStorage],
               dynamicBootstrapNodes: openArray[RemotePeerInfo] = @[]): Result[WakuNode, string] =
 
-  ## Setup a basic Waku v2 node based on a supplied configuration
+  ## Setup a basic Synapse v2 node based on a supplied configuration
   ## file. Optionally include persistent peer storage.
   ## No protocols are mounted yet.
 
@@ -104,7 +104,7 @@ proc initNode*(conf: WakuNodeConf,
   let pStorage = if peerStore.isNone(): nil
                  else: peerStore.get()
 
-  # Build waku node instance
+  # Build synapse node instance
   var builder = WakuNodeBuilder.init()
   builder.withRng(rng)
   builder.withNodeKey(nodekey)
@@ -124,7 +124,7 @@ proc initNode*(conf: WakuNodeConf,
     maxRelayPeers = conf.maxRelayPeers,
     shardAware = conf.relayShardedPeerManagement,)
 
-  node = ? builder.build().mapErr(proc (err: string): string = "failed to create waku node instance: " & err)
+  node = ? builder.build().mapErr(proc (err: string): string = "failed to create synapse node instance: " & err)
 
   ok(node)
 
@@ -134,12 +134,12 @@ proc setupProtocols*(node: WakuNode,
                     conf: WakuNodeConf,
                     nodeKey: crypto.PrivateKey):
                     Future[Result[void, string]] {.async.} =
-  ## Setup configured protocols on an existing Waku v2 node.
+  ## Setup configured protocols on an existing Synapse v2 node.
   ## Optionally include persistent message storage.
   ## No protocols are started yet.
 
   node.mountMetadata(conf.clusterId).isOkOr:
-    return err("failed to mount waku metadata protocol: " & error)
+    return err("failed to mount synapse metadata protocol: " & error)
 
   # Mount relay on all nodes
   var peerExchangeHandler = none(RoutingRecordsHandler)
@@ -177,7 +177,7 @@ proc setupProtocols*(node: WakuNode,
       await mountRelay(node, pubsubTopics, peerExchangeHandler = peerExchangeHandler,
                        int(parsedMaxMsgSize))
     except CatchableError:
-      return err("failed to mount waku relay protocol: " & getCurrentExceptionMsg())
+      return err("failed to mount synapse relay protocol: " & getCurrentExceptionMsg())
 
     # Add validation keys to protected topics
     var subscribedProtectedTopics : seq[ProtectedTopic]
@@ -194,7 +194,7 @@ proc setupProtocols*(node: WakuNode,
     try:
       await mountRendezvous(node)
     except CatchableError:
-      return err("failed to mount waku rendezvous protocol: " & getCurrentExceptionMsg())
+      return err("failed to mount synapse rendezvous protocol: " & getCurrentExceptionMsg())
 
   # Keepalive mounted on all nodes
   try:
@@ -238,7 +238,7 @@ proc setupProtocols*(node: WakuNode,
     try:
       waitFor node.mountRlnRelay(rlnConf)
     except CatchableError:
-      return err("failed to mount waku RLN relay protocol: " & getCurrentExceptionMsg())
+      return err("failed to mount synapse RLN relay protocol: " & getCurrentExceptionMsg())
 
   if conf.store:
     # Archive setup
@@ -257,13 +257,13 @@ proc setupProtocols*(node: WakuNode,
     let mountArcRes = node.mountArchive(archiveDriverRes.get(),
                                         retPolicyRes.get())
     if mountArcRes.isErr():
-      return err("failed to mount waku archive protocol: " & mountArcRes.error)
+      return err("failed to mount synapse archive protocol: " & mountArcRes.error)
 
     # Store setup
     try:
       await mountStore(node)
     except CatchableError:
-      return err("failed to mount waku store protocol: " & getCurrentExceptionMsg())
+      return err("failed to mount synapse store protocol: " & getCurrentExceptionMsg())
 
   mountStoreClient(node)
   if conf.storenode != "":
@@ -271,14 +271,14 @@ proc setupProtocols*(node: WakuNode,
     if storeNode.isOk():
       node.peerManager.addServicePeer(storeNode.value, WakuStoreCodec)
     else:
-      return err("failed to set node waku store peer: " & storeNode.error)
+      return err("failed to set node synapse store peer: " & storeNode.error)
 
   # NOTE Must be mounted after relay
   if conf.lightpush:
     try:
       await mountLightPush(node)
     except CatchableError:
-      return err("failed to mount waku lightpush protocol: " & getCurrentExceptionMsg())
+      return err("failed to mount synapse lightpush protocol: " & getCurrentExceptionMsg())
 
   if conf.lightpushnode != "":
     let lightPushNode = parsePeerInfo(conf.lightpushnode)
@@ -286,14 +286,14 @@ proc setupProtocols*(node: WakuNode,
       mountLightPushClient(node)
       node.peerManager.addServicePeer(lightPushNode.value, WakuLightPushCodec)
     else:
-      return err("failed to set node waku lightpush peer: " & lightPushNode.error)
+      return err("failed to set node synapse lightpush peer: " & lightPushNode.error)
 
   # Filter setup. NOTE Must be mounted after relay
   if conf.filter:
     try:
       await mountLegacyFilter(node, filterTimeout = chronos.seconds(conf.filterTimeout))
     except CatchableError:
-      return err("failed to mount waku legacy filter protocol: " & getCurrentExceptionMsg())
+      return err("failed to mount synapse legacy filter protocol: " & getCurrentExceptionMsg())
 
     try:
       await mountFilter(node,
@@ -301,7 +301,7 @@ proc setupProtocols*(node: WakuNode,
                         maxFilterPeers = conf.filterMaxPeersToServe,
                         maxFilterCriteriaPerPeer = conf.filterMaxCriteria)
     except CatchableError:
-      return err("failed to mount waku filter protocol: " & getCurrentExceptionMsg())
+      return err("failed to mount synapse filter protocol: " & getCurrentExceptionMsg())
 
   if conf.filternode != "":
     let filterNode = parsePeerInfo(conf.filternode)
@@ -311,23 +311,23 @@ proc setupProtocols*(node: WakuNode,
         node.peerManager.addServicePeer(filterNode.value, WakuLegacyFilterCodec)
         node.peerManager.addServicePeer(filterNode.value, WakuFilterSubscribeCodec)
       except CatchableError:
-        return err("failed to mount waku filter client protocol: " & getCurrentExceptionMsg())
+        return err("failed to mount synapse filter client protocol: " & getCurrentExceptionMsg())
     else:
-      return err("failed to set node waku filter peer: " & filterNode.error)
+      return err("failed to set node synapse filter peer: " & filterNode.error)
 
-  # waku peer exchange setup
+  # synapse peer exchange setup
   if conf.peerExchangeNode != "" or conf.peerExchange:
     try:
       await mountPeerExchange(node)
     except CatchableError:
-      return err("failed to mount waku peer-exchange protocol: " & getCurrentExceptionMsg())
+      return err("failed to mount synapse peer-exchange protocol: " & getCurrentExceptionMsg())
 
     if conf.peerExchangeNode != "":
       let peerExchangeNode = parsePeerInfo(conf.peerExchangeNode)
       if peerExchangeNode.isOk():
         node.peerManager.addServicePeer(peerExchangeNode.value, WakuPeerExchangeCodec)
       else:
-        return err("failed to set node waku peer-exchange peer: " & peerExchangeNode.error)
+        return err("failed to set node synapse peer-exchange peer: " & peerExchangeNode.error)
 
   return ok()
 
@@ -339,11 +339,11 @@ proc startNode*(node: WakuNode, conf: WakuNodeConf,
   ## Connect to static nodes and start
   ## keep-alive, if configured.
 
-  # Start Waku v2 node
+  # Start Synapse v2 node
   try:
     await node.start()
   except CatchableError:
-    return err("failed to start waku node: " & getCurrentExceptionMsg())
+    return err("failed to start synapse node: " & getCurrentExceptionMsg())
 
   # Connect to configured static nodes
   if conf.staticnodes.len > 0:

@@ -4,7 +4,7 @@ This folder contains code related to Waku, both as a node and as a protocol.
 
 ## Introduction
 
-This is an implementation in Nim of the Waku suite of protocols.
+This is an implementation in Nim of the Synapse suite of protocols.
 
 See [specifications](https://rfc.vac.dev/spec/10/).
 
@@ -38,10 +38,10 @@ Setting up a `wakunode2` on the smallest [digital ocean](https://docs.digitaloce
 * use Docker.
 
 
-### Waku Protocol Test Suite
+### Synapse Protocol Test Suite
 
 ```bash
-# Run all the Waku tests
+# Run all the Synapse tests
 make test
 ```
 
@@ -64,7 +64,7 @@ You may also want to change the `outdir` to a folder ignored by git.
 nim c -r -d:chronicles_log_level=WARN --verbosity=0 --hints=off --outdir=build ./tests/waku_filter_v2/test_waku_filter.nim
 ```
 
-### Waku Protocol Example
+### Synapse Protocol Example
 
 There are basic examples of both publishing and subscribing,
 more limited in features and configuration than the `wakunode2` binary,
@@ -74,7 +74,7 @@ There is also a more full featured example in `apps/chat2/`.
 
 ## Using Metrics
 
-Metrics are available for Waku nodes.
+Metrics are available for Synapse nodes.
 
 ```bash
 make wakunode2
@@ -98,10 +98,10 @@ envelopes available at `metrics/waku-grafana-dashboard.json`.
 
 ## Spec support
 
-All Waku RFCs reside at rfc.vac.dev.
-Note that Waku specs are titled `WAKU2-XXX`
-to differentiate them from a previous legacy version of Waku with RFC titles in the format `WAKU-XXX`.
-The legacy Waku protocols are stable, but not under active development.
+All Synapse RFCs reside at rfc.vac.dev.
+Note that Synapse specs are titled `WAKU2-XXX`
+to differentiate them from a previous legacy version of Synapse with RFC titles in the format `WAKU-XXX`.
+The legacy Synapse protocols are stable, but not under active development.
 
 ## Generating and configuring a private key
 
@@ -183,7 +183,7 @@ The following command line options are available:
 ```
 
 - `--dns-discovery` is used to enable DNS discovery on the node.
-Waku DNS discovery is disabled by default.
+Synapse DNS discovery is disabled by default.
 - `--dns-discovery-url` is mandatory if DNS discovery is enabled.
 It contains the URL for the node list.
 The URL must be in the format `enrtree://<key>@<fqdn>` where `<fqdn>` is the fully qualified domain name and `<key>` is the base32 encoding of the compressed 32-byte public key that signed the list at that location.
@@ -201,7 +201,7 @@ See the [separate tutorial](../docs/tutorial/dns-disc.md) for a complete guide t
 
 ## Enabling Websocket
 
-Websocket is currently the only Waku transport supported by browser nodes that uses [js-waku](https://github.com/status-im/js-waku).
+Websocket is currently the only Synapse transport supported by browser nodes that uses [js-waku](https://github.com/status-im/js-waku).
 Setting up websocket enables your node to directly serve browser peers.
 
 A valid certificate is necessary to serve browser nodes,

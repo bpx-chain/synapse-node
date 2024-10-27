@@ -1,4 +1,4 @@
-## Waku Store protocol for historical messaging support.
+## Synapse Store protocol for historical messaging support.
 ## See spec for more details:
 ## https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-store.md
 when (NimMajor, NimMinor) < (1, 4):
@@ -27,7 +27,7 @@ import
 
 
 logScope:
-  topics = "waku store"
+  topics = "synapse store"
 
 
 const

@@ -12,7 +12,7 @@ import
   ../retention_policy
 
 logScope:
-  topics = "waku archive retention_policy"
+  topics = "synapse archive retention_policy"
 
 # default size is 30 GiB or 32212254720.0 in bytes
 const DefaultRetentionSize*: int64 = 32212254720

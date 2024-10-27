@@ -21,7 +21,7 @@
       }
     ]
   },
-  "description": "Metrics for Waku nodes written in Nim",
+  "description": "Metrics for Synapse nodes written in Nim",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
@@ -708,7 +708,7 @@
           "refId": "C"
         }
       ],
-      "title": "Waku Errors",
+      "title": "Synapse Errors",
       "type": "timeseries"
     },
     {
@@ -896,7 +896,7 @@
           "refId": "A"
         }
       ],
-      "title": "Waku version",
+      "title": "Synapse version",
       "type": "timeseries"
     },
     {
@@ -1014,7 +1014,7 @@
           "refId": "A"
         }
       ],
-      "title": "Waku Node Filters",
+      "title": "Synapse Node Filters",
       "type": "timeseries"
     },
     {
@@ -1105,7 +1105,7 @@
           "refId": "A"
         }
       ],
-      "title": "Waku Node Errors",
+      "title": "Synapse Node Errors",
       "type": "timeseries"
     },
     {
@@ -2713,7 +2713,7 @@
           "refId": "A"
         }
       ],
-      "title": "Waku Store Peers",
+      "title": "Synapse Store Peers",
       "type": "timeseries"
     },
     {
@@ -2819,7 +2819,7 @@
           "refId": "B"
         }
       ],
-      "title": "Waku Archive Messages",
+      "title": "Synapse Archive Messages",
       "type": "timeseries"
     },
     {
@@ -2910,7 +2910,7 @@
           "refId": "A"
         }
       ],
-      "title": "Waku Store Queries (1m rate)",
+      "title": "Synapse Store Queries (1m rate)",
       "type": "timeseries"
     },
     {
@@ -3018,7 +3018,7 @@
           "refId": "B"
         }
       ],
-      "title": "Waku Archive Errors (1m rate)",
+      "title": "Synapse Archive Errors (1m rate)",
       "type": "timeseries"
     },
     {
@@ -3132,7 +3132,7 @@
           "refId": "A"
         }
       ],
-      "title": "Waku Archive Query Duration",
+      "title": "Synapse Archive Query Duration",
       "tooltip": {
         "show": true,
         "showHistogram": true
@@ -3266,7 +3266,7 @@
           "refId": "A"
         }
       ],
-      "title": "Waku Archive Insert Duration",
+      "title": "Synapse Archive Insert Duration",
       "tooltip": {
         "show": true,
         "showHistogram": true
@@ -3302,7 +3302,7 @@
             "type": "prometheus",
             "uid": "P6693426190CB2316"
           },
-          "description": "Waku Filter Peers",
+          "description": "Synapse Filter Peers",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -3387,7 +3387,7 @@
               "refId": "A"
             }
           ],
-          "title": "Waku Filter Peers",
+          "title": "Synapse Filter Peers",
           "type": "timeseries"
         },
         {
@@ -3478,7 +3478,7 @@
               "refId": "A"
             }
           ],
-          "title": "Waku Filter Subscribers",
+          "title": "Synapse Filter Subscribers",
           "type": "timeseries"
         },
         {
@@ -3570,7 +3570,7 @@
               "refId": "A"
             }
           ],
-          "title": "Waku Filter Errors",
+          "title": "Synapse Filter Errors",
           "type": "timeseries"
         }
       ],
@@ -3686,7 +3686,7 @@
               "refId": "A"
             }
           ],
-          "title": "Waku Lightpush Peers",
+          "title": "Synapse Lightpush Peers",
           "type": "timeseries"
         },
         {
@@ -3775,7 +3775,7 @@
               "refId": "A"
             }
           ],
-          "title": "Waku Lightpush Errors",
+          "title": "Synapse Lightpush Errors",
           "type": "timeseries"
         }
       ],
@@ -3864,7 +3864,7 @@
           ],
           "thresholds": [],
           "timeRegions": [],
-          "title": "Waku Swap Peers",
+          "title": "Synapse Swap Peers",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -4035,7 +4035,7 @@
           ],
           "thresholds": [],
           "timeRegions": [],
-          "title": "Waku Swap Account State",
+          "title": "Synapse Swap Account State",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -4151,7 +4151,7 @@
               "refId": "A"
             }
           ],
-          "title": "Waku Swap Errors",
+          "title": "Synapse Swap Errors",
           "type": "timeseries"
         }
       ],
@@ -4285,7 +4285,7 @@
     ]
   },
   "timezone": "browser",
-  "title": "Nim-Waku V2",
+  "title": "Nim-Synapse V2",
   "uid": "qrp_ZCTGz",
   "version": 104,
   "weekStart": ""

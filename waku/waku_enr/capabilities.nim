@@ -17,7 +17,7 @@ const
 
 
 type
-  ## 8-bit flag field to indicate Waku node capabilities.
+  ## 8-bit flag field to indicate Synapse node capabilities.
   ## Only the 4 LSBs are currently defined according
   ## to RFC31 (https://rfc.vac.dev/spec/31/).
   CapabilitiesBitfield* = distinct uint8

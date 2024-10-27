@@ -1,4 +1,4 @@
-## Waku Filter client for subscribing and receiving filtered messages
+## Synapse Filter client for subscribing and receiving filtered messages
 
 when (NimMajor, NimMinor) < (1, 4):
   {.push raises: [Defect].}
@@ -20,7 +20,7 @@ import
   ./rpc
 
 logScope:
-  topics = "waku filter client"
+  topics = "synapse filter client"
 
 type
   WakuFilterClient* = ref object of LPProtocol

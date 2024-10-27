@@ -1,4 +1,4 @@
-## Waku Message module.
+## Synapse Message module.
 ##
 ## See https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-message.md
 ## for spec.

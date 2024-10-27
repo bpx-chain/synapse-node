@@ -19,8 +19,8 @@ extern "C" {
 
 typedef void (*WakuCallBack) (int callerRet, const char* msg, size_t len, void* userData);
 
-// Creates a new instance of the waku node.
-// Sets up the waku node from the given configuration.
+// Creates a new instance of the synapse node.
+// Sets up the synapse node from the given configuration.
 // Returns a pointer to the Context needed by the rest of the API functions.
 void* waku_new(
              const char* configJson,

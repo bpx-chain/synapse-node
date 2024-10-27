@@ -40,7 +40,7 @@ when defined(rln_v2):
     idCommitment*: IDCommitment
     userMessageLimit*: UserMessageLimit
     
-# Custom data types defined for waku rln relay -------------------------
+# Custom data types defined for synapse rln relay -------------------------
 type RateLimitProof* = object
   ## RateLimitProof holds the public inputs to rln circuit as
   ## defined in https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view#Public-Inputs

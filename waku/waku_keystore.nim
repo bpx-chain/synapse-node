@@ -5,7 +5,7 @@ import
 export
   keyfile
 
-# The Waku Keystore implementation
+# The Synapse Keystore implementation
 import
   ./waku_keystore/keystore,
   ./waku_keystore/conversion_utils,

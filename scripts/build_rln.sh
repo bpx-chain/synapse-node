@@ -18,7 +18,7 @@ output_filename=$3
 host_triplet=$(rustc --version --verbose | awk '/host:/{print $2}')
 
 # Download the prebuilt rln library if it is available
-if curl --silent --fail-with-body -L \
+if curl --silent --fail -L \
   "https://github.com/vacp2p/zerokit/releases/download/$rln_version/${host_triplet}-rln.tar.gz" \
   -o "${host_triplet}-rln.tar.gz";
 then

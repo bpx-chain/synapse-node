@@ -72,7 +72,7 @@ proc get*(peerStore: PeerStore,
   )
 
 proc getWakuProtos*(peerStore: PeerStore): seq[string] =
-  ## Get the waku protocols of all the stored peers.
+  ## Get the synapse protocols of all the stored peers.
   let wakuProtocols = toSeq(peerStore[ProtoBook].book.values())
                         .flatten()
                         .deduplicate()

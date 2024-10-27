@@ -1,4 +1,4 @@
-## Waku content topics definition and namespacing utils
+## Synapse content topics definition and namespacing utils
 ##
 ## See 23/WAKU2-TOPICS RFC: https://rfc.vac.dev/spec/23/
 

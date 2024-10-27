@@ -1,4 +1,4 @@
-## Waku Message module: encoding and decoding
+## Synapse Message module: encoding and decoding
 # See:
 # - RFC 14: https://rfc.vac.dev/spec/14/
 # - Proto definition: https://github.com/vacp2p/waku/blob/main/waku/message/v1/message.proto

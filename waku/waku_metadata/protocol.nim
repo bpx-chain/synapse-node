@@ -21,7 +21,7 @@ import
   ./rpc
 
 logScope:
-  topics = "waku metadata"
+  topics = "synapse metadata"
 
 const WakuMetadataCodec* = "/vac/waku/metadata/1.0.0"
 const RpcResponseMaxBytes* = 1024

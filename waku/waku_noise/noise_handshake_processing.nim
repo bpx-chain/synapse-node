@@ -1,4 +1,4 @@
-# Waku Noise Protocols for Waku Payload Encryption
+# Synapse Noise Protocols for Synapse Payload Encryption
 ## See spec for more details:
 ## https://github.com/vacp2p/rfc/tree/master/content/docs/rfcs/35
 
@@ -20,7 +20,7 @@ import ./noise
 import ./noise_utils
 
 logScope:
-  topics = "waku noise"
+  topics = "synapse noise"
 
 #################################################################
 
@@ -316,7 +316,7 @@ proc processMessagePatternTokens(rng: var rand.HmacDrbgContext, hs: var Handshak
         if "psk" in hs.handshakePattern.name:
           hs.ss.mixKey(hs.e.publicKey)
 
-        # We add the ephemeral public key to the Waku payload
+        # We add the ephemeral public key to the Synapse payload
         outHandshakeMessage.add toNoisePublicKey(getPublicKey(hs.e))
 
     of T_s:
@@ -364,7 +364,7 @@ proc processMessagePatternTokens(rng: var rand.HmacDrbgContext, hs: var Handshak
         # That is, encS may either be an encrypted or unencrypted static key.
         let encS = hs.ss.encryptAndHash(hs.s.publicKey)
 
-        # We add the (encrypted) static public key to the Waku payload
+        # We add the (encrypted) static public key to the Synapse payload
         # Note that encS = (Enc(s) || tag) if encryption key is set, otherwise encS = s.
         # We distinguish these two cases by checking length of encryption and we set the proper encryption flag
         if encS.len > Curve25519Key.len:

@@ -23,7 +23,7 @@ export
   endians2
 
 logScope:
-    topics = "waku rln_relay conversion_utils"
+    topics = "synapse rln_relay conversion_utils"
 
 proc inHex*(value: IdentityTrapdoor or
                    IdentityNullifier or

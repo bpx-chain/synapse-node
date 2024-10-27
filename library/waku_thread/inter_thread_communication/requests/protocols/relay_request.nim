@@ -93,7 +93,7 @@ proc process*(self: ptr RelayRequest,
   defer: destroyShared(self)
 
   if node.wakuRelay.isNil():
-    return err("Operation not supported without Waku Relay enabled.")
+    return err("Operation not supported without Synapse Relay enabled.")
 
   case self.operation:
 

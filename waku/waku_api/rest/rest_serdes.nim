@@ -20,7 +20,7 @@ import
   ./responses
 
 logScope:
-  topics = "waku node rest"
+  topics = "synapse node rest"
 
 proc encodeBytesOf*[T](value: T,
                   contentType: string): RestResult[seq[byte]]=

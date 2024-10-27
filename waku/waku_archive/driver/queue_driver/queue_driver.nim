@@ -16,13 +16,13 @@ import
   ./index
 
 logScope:
-  topics = "waku archive queue_store"
+  topics = "synapse archive queue_store"
 
 const QueueDriverDefaultMaxCapacity* = 25_000
 
 type
   IndexedWakuMessage = object
-    # TODO: may need to rename this object as it holds both the index and the pubsub topic of a waku message
+    # TODO: may need to rename this object as it holds both the index and the pubsub topic of a synapse message
     ## This type is used to encapsulate a WakuMessage and its Index
     msg*: WakuMessage
     index*: Index

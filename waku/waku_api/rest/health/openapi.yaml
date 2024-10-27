@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Waku V2 node REST API
+  title: Synapse V2 node REST API
   version: 1.0.0
   contact:
     name: VAC Team
@@ -14,13 +14,13 @@ paths:
   /health:
     get:
       summary: Get node health status
-      description: Retrieve readiness of a Waku v2 node.
+      description: Retrieve readiness of a Synapse v2 node.
       operationId: healthcheck
       tags:
         - health
       responses:
         '200':
-          description: Waku v2 node is up and running.
+          description: Synapse v2 node is up and running.
           content:
             text/plain:
                 schema:
